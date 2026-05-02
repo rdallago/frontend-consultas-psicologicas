@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+.btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #219150;
+}

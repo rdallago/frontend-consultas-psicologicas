@@ -1,0 +1,114 @@
+h2{
+  margin-bottom:20px;
+}
+
+.barra-superior{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.barra-superior button{
+  padding:8px 14px;
+  cursor:pointer;
+}
+
+.calendario{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+}
+
+.encabezado{
+  font-weight:bold;
+  text-align:center;
+  padding:10px;
+  background:#e5e7eb;
+  border-radius:8px;
+}
+
+.dia{
+  min-height:120px;
+  border:1px solid #ddd;
+  padding:8px;
+  border-radius:10px;
+  cursor:pointer;
+  background:white;
+}
+
+.dia:hover{
+  background:#f9fafb;
+}
+
+.numero-dia{
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.turnito{
+  background:#2563eb;
+  color:white;
+  padding:4px 6px;
+  border-radius:6px;
+  margin-bottom:5px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.modal-fondo{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal{
+  background:white;
+  padding:25px;
+  border-radius:14px;
+  width:380px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.modal input,
+.modal select{
+  padding:10px;
+}
+
+.acciones{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.acciones button{
+  flex:1;
+  padding:10px;
+  cursor:pointer;
+}
+
+.rojo{
+  background:#dc2626;
+  color:white;
+}
+
+.toast{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#16a34a;
+  color:white;
+  padding:14px 22px;
+  border-radius:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  font-weight:bold;
+  z-index:9999;
+}
+

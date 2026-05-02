@@ -1,0 +1,112 @@
+<h2>{{ esEdicion ? 'Editar Paciente' : 'Nuevo Paciente' }}</h2>
+
+<form #form="ngForm">
+
+<div *ngIf="paciente; else cargando">
+
+  <!-- NOMBRE -->
+  <div>
+    <label>Nombre:</label><br>
+    <input [(ngModel)]="paciente.nombre" name="nombre" required #nombre="ngModel">
+    <div *ngIf="nombre.invalid && nombre.touched">
+      El nombre es obligatorio
+    </div>
+  </div>
+
+  <br>
+
+  <!-- APELLIDO -->
+  <div>
+    <label>Apellido:</label><br>
+    <input [(ngModel)]="paciente.apellido" name="apellido" required #apellido="ngModel">
+    <div *ngIf="apellido.invalid && apellido.touched">
+      El apellido es obligatorio
+    </div>
+  </div>
+
+  <br>
+
+  <!-- DNI -->
+  <div>
+    <label>DNI:</label><br>
+    <input [(ngModel)]="paciente.dni" name="dni" required #dni="ngModel">
+    <div *ngIf="dni.invalid && dni.touched">
+      El DNI es obligatorio
+    </div>
+  </div>
+
+  <br>
+
+  <!-- EMAIL -->
+  <div>
+    <label>Email:</label><br>
+    <input 
+      [(ngModel)]="paciente.email" 
+      name="email" 
+      required 
+      email 
+      #emailCtrl="ngModel"
+    >
+    <div *ngIf="emailCtrl.invalid && emailCtrl.touched">
+      <small *ngIf="emailCtrl.errors?.['required']">
+        El email es obligatorio
+      </small>
+      <small *ngIf="emailCtrl.errors?.['email']">
+        Formato inválido (ej: correo@gmail.com)
+      </small>
+    </div>
+  </div>
+
+  <br>
+
+  <!-- TELÉFONO -->
+  <div>
+    <label>Teléfono:</label><br>
+    <input [(ngModel)]="paciente.telefono" name="telefono">
+  </div>
+
+  <br>
+
+  <!-- DIRECCIÓN -->
+  <div>
+    <label>Dirección:</label><br>
+    <input 
+      [(ngModel)]="paciente.direccion" 
+      name="direccion" 
+      required 
+      #direccion="ngModel"
+    >
+    <div *ngIf="direccion.invalid && direccion.touched">
+      La dirección es obligatoria
+    </div>
+  </div>
+
+  <br>
+
+  <!-- FECHA DE NACIMIENTO -->
+  <div>
+    <label>Fecha de nacimiento:</label><br>
+    <input 
+      type="date"
+      [(ngModel)]="paciente.fechaNacimiento" 
+      name="fechaNacimiento"
+      required
+      #fecha="ngModel"
+    >
+    <div *ngIf="fecha.invalid && fecha.touched">
+      La fecha de nacimiento es obligatoria
+    </div>
+  </div>
+
+  <br>
+
+  <button [disabled]="form.invalid" (click)="guardar()">Guardar</button>
+  <button type="button" (click)="volver()">Cancelar</button>
+
+</div>
+
+</form>
+
+<ng-template #cargando>
+  <p>Cargando datos del paciente...</p>
+</ng-template>

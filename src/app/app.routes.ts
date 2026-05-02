@@ -1,3 +1,12 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { Pacientes } from './pages/pacientes/pacientes';
+import { TurnosComponent } from './pages/turnos/turnos';
+
+export const routes: Routes = [
+  { path: '', redirectTo: 'pacientes', pathMatch: 'full' },
+
+  { path: 'pacientes', component: Pacientes },
+
+  { path: 'turnos', component: TurnosComponent }
+];

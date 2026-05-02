@@ -1,0 +1,102 @@
+<h2>Gestión de Turnos</h2>
+
+<div class="barra-superior">
+  <button (click)="cambiarMes(-1)">◀</button>
+  <h3>{{ mesActual + 1 }}/{{ anioActual }}</h3>
+  <button (click)="cambiarMes(1)">▶</button>
+</div>
+
+<div class="calendario">
+
+  <div class="encabezado">Lun</div>
+  <div class="encabezado">Mar</div>
+  <div class="encabezado">Mié</div>
+  <div class="encabezado">Jue</div>
+  <div class="encabezado">Vie</div>
+  <div class="encabezado">Sáb</div>
+  <div class="encabezado">Dom</div>
+
+  <div
+    class="dia"
+    *ngFor="let dia of dias"
+    (click)="abrirFormulario(dia)">
+
+    <div class="numero-dia">
+      {{ dia }}
+    </div>
+
+    <div
+      class="turnito"
+      *ngFor="let turno of turnosDelDia(dia)"
+      (click)="editarTurno(turno); $event.stopPropagation()">
+
+      {{ turno.fechaHora.substring(11,16) }}
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="modal-fondo" *ngIf="mostrarPopup">
+
+  <div class="modal">
+
+    <h3 *ngIf="!editando">Nuevo Turno</h3>
+    <h3 *ngIf="editando">Editar Turno</h3>
+
+    <label>Fecha y hora</label>
+    <input type="datetime-local"
+           [(ngModel)]="nuevoTurno.fechaHora">
+
+    <label>Paciente</label>
+    <select [(ngModel)]="nuevoTurno.pacienteId">
+
+      <option value="">Seleccione</option>
+
+      <option *ngFor="let p of pacientes"
+              [value]="p.id">
+
+        {{ p.nombre }} {{ p.apellido }}
+
+      </option>
+
+    </select>
+
+    <label *ngIf="editando">Estado</label>
+
+    <select *ngIf="editando"
+            [(ngModel)]="nuevoTurno.estado">
+
+      <option value="AGENDADO">Agendado</option>
+      <option value="ASISTIO">Asistió</option>
+      
+    </select>
+
+    <div class="acciones">
+
+       
+<button type="button" (click)="guardarTurno()">
+  Guardar
+</button>
+    
+
+      <button *ngIf="editando"
+              class="rojo"
+              (click)="eliminarTurno()">
+        Eliminar
+      </button>
+
+      <button (click)="cerrarPopup()">
+        Cerrar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" *ngIf="mostrarToast">
+  {{ mensaje }}
+</div>
