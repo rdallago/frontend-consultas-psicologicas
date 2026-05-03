@@ -25,6 +25,8 @@ export class TurnosComponent implements OnInit {
   mostrarToast = false;
   mensaje = '';
 
+  eliminando = false;
+
   nuevoTurno: any = {
     id: null,
     fechaHora: '',
@@ -105,9 +107,10 @@ export class TurnosComponent implements OnInit {
   }
 
   editarTurno(turno: any) {
+
     this.nuevoTurno = {
       id: turno.id,
-      fechaHora: turno.fechaHora.substring(0,16),
+      fechaHora: turno.fechaHora.substring(0, 16),
       pacienteId: turno.paciente?.id,
       estado: turno.estado
     };
@@ -116,115 +119,134 @@ export class TurnosComponent implements OnInit {
     this.mostrarPopup = true;
   }
 
+  guardarTurno() {
 
-guardarTurno() {
+    const estadoActual = String(this.nuevoTurno.estado || '')
+      .trim()
+      .toUpperCase();
 
-  const estadoActual = String(this.nuevoTurno.estado || '')
-    .trim()
-    .toUpperCase();
+    const body = {
+      fechaHora: this.nuevoTurno.fechaHora,
+      estado: estadoActual,
+      paciente: {
+        id: this.nuevoTurno.pacienteId
+      }
+    };
 
-  const body = {
-    fechaHora: this.nuevoTurno.fechaHora,
-    estado: estadoActual,
-    paciente: {
-      id: this.nuevoTurno.pacienteId
-    }
-  };
+    const request = this.editando
+      ? this.http.put(
+          `http://localhost:8080/api/turnos/${this.nuevoTurno.id}`,
+          body
+        )
+      : this.http.post(
+          `http://localhost:8080/api/turnos`,
+          body
+        );
 
-  const request = this.editando
-    ? this.http.put(
-        `http://localhost:8080/api/turnos/${this.nuevoTurno.id}`,
-        body
-      )
-    : this.http.post(
-        `http://localhost:8080/api/turnos`,
-        body
+    const nuevaFecha = new Date(this.nuevoTurno.fechaHora);
+
+    const conflicto = this.turnos.some(t => {
+
+      if (this.editando && t.id === this.nuevoTurno.id) {
+        return false;
+      }
+
+      const fechaExistente = new Date(t.fechaHora);
+
+      const diferencia =
+        Math.abs(
+          nuevaFecha.getTime() - fechaExistente.getTime()
+        ) / 60000;
+
+      return diferencia < 40;
+    });
+
+    if (conflicto) {
+      this.notificar(
+        'No se puede guardar. Hay superposición o menos de 40 minutos con otro turno.'
       );
-
-  // ==========================
-  // SI ES AUSENTE: GUARDAR YA
-  // ==========================
-  if (estadoActual === 'AUSENTE') {
+      return;
+    }
 
     request.subscribe({
       next: () => {
-        this.notificar('Turno marcado como ausente');
-        this.cargarTurnos();
+
         this.cerrarPopup();
+        this.cargarTurnos();
+
+        this.notificar(
+          this.editando
+            ? 'Turno actualizado'
+            : 'Turno agendado'
+        );
+
+        this.cd.detectChanges();
       },
+
       error: () => {
         this.notificar('No se pudo guardar');
       }
     });
-
-    return;
   }
 
-  // ==========================
-  // VALIDAR SUPERPOSICIÓN
-  // ==========================
-  const nuevaFecha = new Date(this.nuevoTurno.fechaHora);
+eliminarTurno() {
 
-  const conflicto = this.turnos.some(t => {
+  if (this.eliminando) return;
 
-    if (this.editando && t.id === this.nuevoTurno.id) {
-      return false;
+  this.eliminando = true;
+
+  this.http.delete(
+    `http://localhost:8080/api/turnos/${this.nuevoTurno.id}`,
+    {
+      responseType: 'text',
+      observe: 'response'
     }
 
-    if (String(t.estado).toUpperCase() === 'AUSENTE') {
-      return false;
-    }
+  ).subscribe({
 
-    const fechaExistente = new Date(t.fechaHora);
+    next: (resp) => {
 
-    const diferencia =
-      Math.abs(
-        nuevaFecha.getTime() - fechaExistente.getTime()
-      ) / 60000;
+      this.eliminando = false;
 
-    return diferencia < 40;
-  });
+      this.notificar(resp.body || 'Turno eliminado');
 
-  if (conflicto) {
-    this.notificar(
-      'No se puede guardar. Hay superposición o menos de 40 minutos con otro turno.'
-    );
-    return;
-  }
-
-  request.subscribe({
-    next: () => {
-      this.notificar(
-        this.editando
-          ? 'Turno actualizado'
-          : 'Turno agendado'
-      );
+      this.cerrarPopup();
 
       this.cargarTurnos();
-      this.cerrarPopup();
     },
-    error: () => {
-      this.notificar('No se pudo guardar');
-    }
-  });
-}
 
+    error: (err) => {
 
-  eliminarTurno() {
-    this.http.delete(
-      `http://localhost:8080/api/turnos/${this.nuevoTurno.id}`
-    ).subscribe({
-      next: () => {
-        this.cerrarPopup();
-        this.cargarTurnos();
-        this.notificar('Turno eliminado');
+      this.eliminando = false;
+
+      let mensaje = 'No se pudo eliminar el turno';
+
+      if (typeof err.error === 'string') {
+        mensaje = err.error;
       }
-    });
-  }
+      else if (err.error?.text) {
+        mensaje = err.error.text;
+      }
+      else if (err.message) {
+        mensaje = err.message;
+      }
+
+      this.notificar(mensaje);
+
+      this.cd.detectChanges();
+    }
+
+  });
+} 
+
+
+
 
   cerrarPopup() {
+
     this.mostrarPopup = false;
     this.editando = false;
+    this.eliminando = false;
 
     this.nuevoTurno = {
       id: null,
@@ -237,6 +259,7 @@ guardarTurno() {
   }
 
   notificar(texto: string) {
+
     this.mensaje = texto;
     this.mostrarToast = true;
 
