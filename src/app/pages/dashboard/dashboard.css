@@ -1,0 +1,98 @@
+/* ========================= */
+/* TARJETAS */
+/* ========================= */
+
+.card-saas {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-saas:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.text-xs {
+    font-size: .7rem;
+}
+
+.icon-saas {
+    font-size: 1.5rem;
+    opacity: 0.3;
+}
+
+/* ========================= */
+/* LISTAS */
+/* ========================= */
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fc;
+}
+
+/* ========================= */
+/* TABLA */
+/* ========================= */
+
+.tabla-ausencias {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tabla-ausencias th {
+    background-color: #f8f9fc;
+    color: #4e73df;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #e3e6f0;
+}
+
+.tabla-ausencias td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.tabla-ausencias tr:hover {
+    background-color: #f8f9fc;
+}
+
+/* ========================= */
+/* DASHBOARD */
+/* ========================= */
+
+.dashboard-wrapper {
+    background-color: #f5f7fb;
+    min-height: 100vh;
+}
+
+/* ========================= */
+/* GRÁFICO */
+/* ========================= */
+
+canvas {
+    max-width: 100%;
+}

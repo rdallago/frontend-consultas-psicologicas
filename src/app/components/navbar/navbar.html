@@ -1,0 +1,40 @@
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/dashboard">🧠 Gestión Psicológica</a>
+  </div>
+ <div class="menu">
+    <a routerLink="/pacientes" routerLinkActive="activo">
+      Pacientes
+    </a>
+
+    <a routerLink="/turnos" routerLinkActive="activo">
+      Turnos
+    </a>
+     
+    <a routerLink="/dashboard" routerLinkActive="activo">
+      Dashboard
+    </a>
+
+
+    <!-- Este es el acceso clave que acabamos de crear -->
+    <a routerLink="/historias" routerLinkActive="activo">
+      Historias Clínicas
+    </a>
+
+    <a routerLink="/visitas" routerLinkActive="activo">
+      Visitas
+    </a>
+
+    <a routerLink="/usuarios" routerLinkActive="activo">
+      Usuarios
+    </a>
+
+    <a routerLink="/respaldos" routerLinkActive="activo">
+      Respaldos
+    </a>
+  </div>
+
+  <div class="usuario">
+    👤 {{ usuario }}
+  </div>
+</nav>

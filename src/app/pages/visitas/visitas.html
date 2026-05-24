@@ -1,1 +1,473 @@
-<p>visitas works!</p>
+<div class="container-fluid p-4">
+
+  <!-- ===================================== -->
+  <!-- TITULO -->
+  <!-- ===================================== -->
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="titulo">
+
+      Gestión de Visitas
+
+    </h2>
+
+    <button
+      class="btn btn-primary"
+      (click)="abrirPopupNueva()">
+
+      Nueva Visita
+
+    </button>
+
+  </div>
+
+  <!-- ===================================== -->
+  <!-- BUSQUEDA -->
+  <!-- ===================================== -->
+
+  <div class="card shadow mb-3">
+
+    <div class="card-body">
+
+      <div class="row">
+
+        <div class="col-md-6 mb-2">
+
+          <input
+            class="form-control"
+            placeholder="Buscar paciente..."
+            [(ngModel)]="busquedaPaciente"
+            (input)="buscarPaciente()">
+
+        </div>
+
+        <div class="col-md-6 mb-2">
+
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="busquedaFecha"
+            (change)="buscarFecha()">
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===================================== -->
+  <!-- TABLA -->
+  <!-- ===================================== -->
+
+  <div class="card shadow">
+
+    <div class="card-body table-responsive">
+
+      <table class="table table-hover align-middle">
+
+        <thead class="table-light">
+
+          <tr>
+
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Paciente</th>
+            <th>IA</th>
+            <th>Acciones</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let v of visitas">
+
+            <td>
+
+              {{ v.id }}
+
+            </td>
+
+            <td>
+
+              {{ v.fecha | date:'dd/MM/yyyy' }}
+
+            </td>
+
+            <td>
+
+              <span *ngIf="v.turno?.paciente">
+
+                {{ v.turno?.paciente?.nombre }}
+                {{ v.turno?.paciente?.apellido }}
+
+              </span>
+
+              <span
+                *ngIf="!v.turno?.paciente"
+                class="text-danger">
+
+                SIN PACIENTE
+
+              </span>
+
+            </td>
+
+            <!-- ===================================== -->
+            <!-- ESTADO IA -->
+            <!-- ===================================== -->
+
+            <td>
+
+              <span
+                class="badge bg-warning text-dark"
+                *ngIf="v.estadoIa === 'PROCESANDO'">
+
+                Generando...
+
+              </span>
+
+              <span
+                class="badge bg-success"
+                *ngIf="v.estadoIa === 'OK'">
+
+                OK
+
+              </span>
+
+              <span
+                class="badge bg-danger"
+                *ngIf="v.estadoIa === 'ERROR'">
+
+                Error
+
+              </span>
+
+              <span
+                class="badge bg-secondary"
+                *ngIf="!v.estadoIa">
+
+                Sin IA
+
+              </span>
+
+            </td>
+
+            <!-- ===================================== -->
+            <!-- ACCIONES -->
+            <!-- ===================================== -->
+
+            <td>
+
+              <button
+                class="btn btn-warning btn-sm me-2"
+                (click)="abrirEdicion(v)">
+
+                Editar
+
+              </button>
+
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="eliminar(v.id)">
+
+                Eliminar
+
+              </button>
+                
+                <button
+    (click)="verPdf(v.id)"
+    class="btn-pdf"
+    title="Ver PDF"
+>
+    <i class="fas fa-file-pdf"></i>
+</button>
+                
+                
+                
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <!-- ===================================== -->
+      <!-- SIN DATOS -->
+      <!-- ===================================== -->
+
+      <div
+        *ngIf="visitas.length === 0"
+        class="text-center text-muted p-3">
+
+        No hay visitas registradas
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- POPUP -->
+<!-- ===================================== -->
+
+<div
+  class="popup-overlay"
+  *ngIf="mostrarPopup">
+
+  <div class="popup popup-grande">
+
+    <h4 class="mb-4">
+
+      {{ editando ? 'Editar Visita' : 'Nueva Visita' }}
+
+    </h4>
+
+    <!-- ===================================== -->
+    <!-- TURNO -->
+    <!-- ===================================== -->
+
+    <select
+      class="form-select mb-3"
+      [(ngModel)]="nuevaVisita.turno"
+      [disabled]="editando">
+
+      <option [ngValue]="null">
+
+        Seleccione turno válido
+
+      </option>
+
+      <option
+  *ngFor="let t of turnos"
+  [ngValue]="t"
+  [disabled]="!t || !t.paciente">
+
+      {{ t?.paciente?.nombre }}
+      {{ t?.paciente?.apellido }}
+      {{ t?.fechaHora | date:'dd/MM/yyyy HH:mm' }}
+
+      </option>
+
+    </select>
+
+    <!-- ===================================== -->
+    <!-- FECHA -->
+    <!-- ===================================== -->
+
+    <input
+      type="date"
+      class="form-control mb-4"
+      [ngModel]="nuevaVisita.turno?.fechaHora | date:'yyyy-MM-dd'"
+      disabled>
+
+    <!-- ===================================== -->
+    <!-- OBSERVACIONES -->
+    <!-- ===================================== -->
+
+    <div class="editor-container mb-4">
+
+      <label class="form-label fw-bold mb-2">
+
+        Observaciones clínicas
+
+      </label>
+
+      <!-- ===================================== -->
+      <!-- QUILL -->
+      <!-- ===================================== -->
+
+      <quill-editor
+        [(ngModel)]="nuevaVisita.observacion"
+        [modules]="editorModules"
+        placeholder="Escriba aquí las observaciones clínicas..."
+        style="height: 220px; display:block;">
+
+      </quill-editor>
+
+      <!-- ===================================== -->
+      <!-- BOTONES -->
+      <!-- ===================================== -->
+
+      <div
+        class="dictado-container mt-4 d-flex flex-wrap gap-2 align-items-center">
+
+     
+
+        <!-- ===================================== -->
+        <!-- MICROFONO -->
+        <!-- ===================================== -->
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          *ngIf="speechDisponible && !grabando"
+          (click)="iniciarDictado()">
+
+          🎤 Iniciar dictado
+
+        </button>
+
+        <!-- ===================================== -->
+        <!-- DETENER -->
+        <!-- ===================================== -->
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          *ngIf="speechDisponible && grabando"
+          (click)="detenerDictado()">
+
+          ⏹ Detener dictado
+
+        </button>
+
+        <!-- ===================================== -->
+        <!-- ESTADO -->
+        <!-- ===================================== -->
+
+        <span
+          class="text-danger fw-bold"
+          *ngIf="grabando">
+
+          Escuchando...
+
+        </span>
+
+      </div>
+
+      <!-- ===================================== -->
+      <!-- ESTADO IA -->
+      <!-- ===================================== -->
+
+      <div
+        *ngIf="nuevaVisita.estadoIa"
+        class="alert alert-secondary mt-4">
+
+        <span *ngIf="nuevaVisita.estadoIa === 'PROCESANDO'">
+
+          <span
+            class="spinner-border spinner-border-sm me-2">
+          </span>
+
+          Generando resumen IA...
+
+        </span>
+
+        <span *ngIf="nuevaVisita.estadoIa === 'OK'">
+
+          ✅ Resumen IA generado
+
+        </span>
+
+        <span *ngIf="nuevaVisita.estadoIa === 'ERROR'">
+
+          ❌ Error generando resumen IA
+
+        </span>
+
+      </div>
+
+      <!-- ===================================== -->
+      <!-- SPEECH NO SOPORTADO -->
+      <!-- ===================================== -->
+
+      <div
+        *ngIf="!speechDisponible"
+        class="alert alert-warning mt-4">
+
+        El navegador no soporta reconocimiento de voz.
+
+      </div>
+
+      <!-- ===================================== -->
+      <!-- RESUMEN IA -->
+      <!-- ===================================== -->
+
+      <div
+        *ngIf="nuevaVisita.resumenIa"
+        class="card shadow-sm border-0 bg-light mt-4">
+
+        <div class="card-body">
+
+          <div
+            class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="m-0">
+
+              🤖 Resumen generado por IA
+
+            </h5>
+
+          </div>
+
+          <div class="resumen-ia-texto">
+
+            {{ nuevaVisita.resumenIa }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- BOTONES -->
+    <!-- ===================================== -->
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+
+      <button
+        class="btn btn-secondary"
+        (click)="cerrarPopup()">
+
+        Cancelar
+
+      </button>
+
+      <button
+        class="btn btn-success"
+        (click)="guardar()"
+        [disabled]="guardando">
+
+        <span *ngIf="!guardando">
+
+          {{ editando ? 'Guardar cambios' : 'Registrar' }}
+
+        </span>
+
+        <span *ngIf="guardando">
+
+          Guardando...
+
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- TOAST -->
+<!-- ===================================== -->
+
+<div
+  *ngIf="mostrarToast"
+  class="toast-personalizado">
+
+  {{ mensajeToast }}
+
+</div>

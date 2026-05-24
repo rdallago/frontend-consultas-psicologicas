@@ -1,0 +1,229 @@
+<div class="dashboard-wrapper p-4">
+
+  <div class="container-fluid">
+
+    <h2 class="mb-4 text-secondary">
+      Panel de Control
+    </h2>
+
+    <!-- ========================= -->
+    <!-- TARJETAS -->
+    <!-- ========================= -->
+
+    <div class="row mb-4">
+
+      <!-- TOTAL -->
+      <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card card-saas border-left-primary shadow h-100 py-2">
+
+          <div class="card-body">
+
+            <div class="row no-gutters align-items-center">
+
+              <div class="col mr-2">
+
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  Total Turnos
+                </div>
+
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ resumen.totales }}
+                </div>
+
+              </div>
+
+              <div class="col-auto">
+                <span class="icon-saas">📊</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ASISTIDOS -->
+      <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card card-saas border-left-success shadow h-100 py-2">
+
+          <div class="card-body">
+
+            <div class="row no-gutters align-items-center">
+
+              <div class="col mr-2">
+
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                  Asistidos
+                </div>
+
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ resumen.asistidos }}
+                </div>
+
+              </div>
+
+              <div class="col-auto">
+                <span class="icon-saas">✅</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- AUSENTES -->
+      <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card card-saas border-left-danger shadow h-100 py-2">
+
+          <div class="card-body">
+
+            <div class="row no-gutters align-items-center">
+
+              <div class="col mr-2">
+
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                  Ausentes
+                </div>
+
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ resumen.ausentes }}
+                </div>
+
+              </div>
+
+              <div class="col-auto">
+                <span class="icon-saas">❌</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PENDIENTES -->
+      <div class="col-xl-3 col-md-6 mb-4">
+
+        <div class="card card-saas border-left-warning shadow h-100 py-2">
+
+          <div class="card-body">
+
+            <div class="row no-gutters align-items-center">
+
+              <div class="col mr-2">
+
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                  Pendientes
+                </div>
+
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ resumen.pendientes }}
+                </div>
+
+              </div>
+
+              <div class="col-auto">
+                <span class="icon-saas">⏳</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- GRAFICO -->
+    <!-- ========================= -->
+
+    <div class="card shadow mb-4">
+
+      <div class="card-header py-3">
+
+        <h6 class="m-0 font-weight-bold text-primary">
+          Inasistencias por Paciente
+        </h6>
+
+      </div>
+
+      <div class="card-body">
+
+        <div style="position: relative; height: 350px;">
+
+          <canvas #graficoCanvas></canvas>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- TABLA -->
+    <!-- ========================= -->
+
+    <div class="card shadow mb-4">
+
+      <div class="card-header py-3">
+
+        <h6 class="m-0 font-weight-bold text-primary">
+          Frecuencia de Ausencias
+        </h6>
+
+      </div>
+
+      <div class="card-body">
+
+        <table class="tabla-ausencias">
+
+          <thead>
+
+            <tr>
+              <th>Paciente</th>
+              <th>Ausencias</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let p of estadisticas">
+
+              <td>{{ p.nombre }}</td>
+
+              <td>{{ p.ausencias }}</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <div
+          *ngIf="estadisticas.length === 0"
+          class="text-center text-muted p-3"
+        >
+          No hay datos disponibles
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,350 @@
+/* =========================
+   POPUP
+========================= */
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast-personalizado {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2c3e50;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  z-index: 10000;
+}
+
+/* =========================
+   TABLA (MEJORADA SOBRE BOOTSTRAP)
+========================= */
+
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.table thead th {
+  border: none !important;
+  padding: 12px;
+}
+
+.table tbody tr {
+  transition: 0.2s;
+}
+
+.table tbody tr:hover {
+  background-color: #f2f6ff;
+}
+
+/* celdas más prolijas */
+.table td {
+  vertical-align: middle;
+}
+
+/* =========================
+   BOTONES (VISITAS)
+========================= */
+/* =========================
+   POPUP GRANDE PROFESIONAL
+========================= */
+
+.popup {
+
+  background: white;
+
+  width: 90%;
+  max-width: 1100px;
+
+  height: 90vh;
+
+  border-radius: 18px;
+
+  padding: 25px;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.25);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+/* =========================
+   CONTENIDO SCROLL
+========================= */
+
+.popup-content {
+
+  overflow-y: auto;
+
+  padding-right: 8px;
+
+  flex: 1;
+}
+
+/* =========================
+   EDITOR
+========================= */
+
+.editor-container {
+
+  border: 1px solid #dfe6e9;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  background: white;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.04);
+}
+
+/* toolbar */
+
+::ng-deep .NgxEditor__MenuBar {
+
+  border: none !important;
+
+  border-bottom: 1px solid #ecf0f1 !important;
+
+  background: #f8f9fa !important;
+
+  padding: 8px;
+}
+
+/* editor */
+
+::ng-deep .NgxEditor {
+
+  min-height: 350px;
+
+  padding: 18px;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+
+  border: none !important;
+
+  overflow-y: auto;
+}
+
+/* focus */
+
+::ng-deep .NgxEditor:focus {
+
+  outline: none !important;
+}
+
+/* botones editor */
+
+::ng-deep .NgxEditor__MenuItem {
+
+  border-radius: 6px !important;
+
+  transition: 0.2s;
+}
+
+::ng-deep .NgxEditor__MenuItem:hover {
+
+  background: #e8f0fe !important;
+}
+
+/* =========================
+   HEADER POPUP
+========================= */
+
+.popup h4 {
+
+  font-weight: 700;
+
+  color: #2c3e50;
+
+  margin-bottom: 20px;
+}
+
+/* =========================
+   FORMULARIOS
+========================= */
+
+.form-control,
+.form-select {
+
+  border-radius: 10px !important;
+
+  padding: 10px 14px;
+
+  border: 1px solid #dcdde1;
+
+  transition: 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+
+  border-color: #3498db;
+
+  box-shadow:
+    0 0 0 0.2rem rgba(52,152,219,0.2);
+}
+/* =====================================
+   POPUP GRANDE
+===================================== */
+
+.popup-grande {
+  width: 90%;
+  max-width: 1100px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 14px;
+  padding: 30px;
+}
+
+/* =====================================
+   EDITOR QUILL
+===================================== */
+
+.editor-container {
+  margin-top: 10px;
+}
+
+quill-editor {
+  display: block;
+  background: white;
+}
+
+/* toolbar */
+.ql-toolbar {
+  border-radius: 10px 10px 0 0;
+  background: #f8f9fa;
+}
+
+/* editor */
+.ql-container {
+  min-height: 300px;
+  font-size: 15px;
+  border-radius: 0 0 10px 10px;
+  background: white;
+}
+
+/* texto */
+.ql-editor {
+  min-height: 250px;
+  line-height: 1.7;
+}
+
+/* =====================================
+   MICROFONO
+===================================== */
+
+.dictado-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* =====================================
+   SCROLL
+===================================== */
+
+.popup-grande::-webkit-scrollbar {
+  width: 10px;
+}
+
+.popup-grande::-webkit-scrollbar-thumb {
+  background: #bfc4ca;
+  border-radius: 20px;
+}
+
+/* =====================================
+   BOTONES
+===================================== */
+.popup-grande {
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+}
+
+.dictado-container {
+
+  margin-top: 70px;
+
+  padding-bottom: 10px;
+}
+
+.dictado-container {
+  margin-top: 70px;
+}
+
+.popup-grande {
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+quill-editor {
+  display: block;
+  min-height: 260px;
+}
+.resumen-ia-texto {
+
+  white-space: pre-line;
+
+  line-height: 1.6;
+
+  font-size: 15px;
+
+  color: #333;
+}
+.btn-pdf {
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 22px;
+
+    color: #d32f2f;
+
+    transition: 0.2s;
+}
+
+.btn-pdf:hover {
+
+    transform: scale(1.15);
+
+    color: #b71c1c;
+}

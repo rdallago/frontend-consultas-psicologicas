@@ -112,6 +112,15 @@ h2{
   background:#16a34a;
 }
 
+.ausente {
+  background-color: orange;
+  color: black;
+}
+
+.cancelado {
+  background-color: #e0e0e0;
+  color: black;
+}
 
 /* Modal */
 .modal-fondo{

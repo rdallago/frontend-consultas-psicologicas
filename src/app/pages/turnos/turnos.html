@@ -1,22 +1,13 @@
 <h2>Gestión de Turnos</h2>
 
-<!-- Barra superior -->
 <div class="barra-superior">
-
   <button (click)="cambiarMes(-1)">◀</button>
-
-  <h3>
-    {{ mesActual + 1 }}/{{ anioActual }}
-  </h3>
-
+  <h3>{{ mesActual + 1 }}/{{ anioActual }}</h3>
   <button (click)="cambiarMes(1)">▶</button>
-
 </div>
 
-<!-- Calendario -->
 <div class="calendario">
 
-  <!-- Encabezados -->
   <div class="encabezado">Lun</div>
   <div class="encabezado">Mar</div>
   <div class="encabezado">Mié</div>
@@ -25,7 +16,6 @@
   <div class="encabezado">Sáb</div>
   <div class="encabezado">Dom</div>
 
-  <!-- Días -->
   <div
     class="dia"
     *ngFor="let dia of dias"
@@ -35,12 +25,14 @@
       {{ dia }}
     </div>
 
-    <!-- Turnos -->
+    <!-- TURNOS -->
     <div
       class="turnito"
       [ngClass]="turno.estado.toLowerCase()"
       *ngFor="let turno of turnosDelDia(dia)"
-      (click)="editarTurno(turno); $event.stopPropagation()">
+      [title]="turno.motivo || ''"
+
+     (click)="editarTurno(turno); $event.stopPropagation()">
 
       {{ turno.fechaHora.substring(11,16) }}
 
@@ -50,10 +42,11 @@
 
 </div>
 
-<!-- Modal -->
-<div
-  class="modal-fondo"
-  *ngIf="mostrarPopup">
+<!-- ===================================== -->
+<!-- MODAL -->
+<!-- ===================================== -->
+
+<div class="modal-fondo" *ngIf="mostrarPopup">
 
   <div class="modal">
 
@@ -65,18 +58,20 @@
       Editar Turno
     </h3>
 
-    <!-- Fecha -->
+    <!-- FECHA -->
     <label>Fecha y hora</label>
 
     <input
-      type="datetime-local"
-      [(ngModel)]="nuevoTurno.fechaHora">
+  type="datetime-local"
+  [(ngModel)]="nuevoTurno.fechaHora"
+  [disabled]="soloLectura">
 
-    <!-- Paciente -->
+    <!-- PACIENTE -->
     <label>Paciente</label>
 
     <select
-      [(ngModel)]="nuevoTurno.pacienteId">
+  [(ngModel)]="nuevoTurno.pacienteId"
+  [disabled]="soloLectura">
 
       <option value="">
         Seleccione paciente
@@ -84,7 +79,7 @@
 
       <option
         *ngFor="let p of pacientes"
-        [value]="p.id">
+        [ngValue]="p.id">
 
         {{ p.nombre }} {{ p.apellido }}
 
@@ -92,54 +87,83 @@
 
     </select>
 
-    <!-- Estado -->
+    <!-- ===================================== -->
+    <!-- ESTADO -->
+    <!-- ===================================== -->
+
     <div *ngIf="editando">
 
       <label>Estado</label>
 
-      <select
-        [(ngModel)]="nuevoTurno.estado">
+      <select [(ngModel)]="nuevoTurno.estado">
+          [disabled]="soloLectura">
 
         <option value="AGENDADO">
           Agendado
         </option>
 
-        <option value="ASISTIO">
-          Asistió
+        <option value="AUSENTE">
+          No asistió
+        </option>
+
+        <option value="CANCELADO">
+          Cancelado
         </option>
 
       </select>
 
     </div>
 
-    <!-- Botones -->
+    <!-- ===================================== -->
+    <!-- MOTIVO -->
+    <!-- ===================================== -->
+
+    <div *ngIf="
+      editando &&
+      (
+        nuevoTurno.estado === 'AUSENTE'
+        || nuevoTurno.estado === 'CANCELADO'
+      )
+    ">
+
+      <label>Motivo</label>
+
+      <textarea
+  [(ngModel)]="nuevoTurno.motivo"
+  [disabled]="soloLectura"
+        placeholder="Ej: paciente no avisó"
+        rows="3">
+      </textarea>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- ACCIONES -->
+    <!-- ===================================== -->
+
     <div class="acciones">
 
       <button
-        type="button"
-        (click)="guardarTurno()">
-
+  *ngIf="!soloLectura"
+  (click)="guardarTurno()">
         Guardar
-
       </button>
 
       <button
-        type="button"
-        *ngIf="editando"
+  *ngIf="editando && !soloLectura"
         class="rojo"
-        [disabled]="eliminando"
+        [disabled]="
+          eliminando ||
+          nuevoTurno.estado === 'ASISTIO'
+        "
         (click)="eliminarTurno()">
 
         {{ eliminando ? 'Eliminando...' : 'Eliminar' }}
 
       </button>
 
-      <button
-        type="button"
-        (click)="cerrarPopup()">
-
+      <button (click)="cerrarPopup()">
         Cerrar
-
       </button>
 
     </div>
@@ -148,11 +172,10 @@
 
 </div>
 
-<!-- Toast -->
-<div
-  class="toast"
-  *ngIf="mostrarToast">
+<!-- ===================================== -->
+<!-- TOAST -->
+<!-- ===================================== -->
 
+<div class="toast" *ngIf="mostrarToast">
   {{ mensaje }}
-
 </div>

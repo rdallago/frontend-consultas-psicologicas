@@ -1,0 +1,124 @@
+<h2>Historias Clínicas</h2>
+<!-- BUSCADOR -->
+<input
+  type="text"
+  placeholder="Buscar por paciente..."
+  [(ngModel)]="filtroNombre"
+  (input)="filtrar()"
+  class="buscador"
+/>
+<br>
+
+<!-- BOTÓN NUEVO -->
+<button class="btn-principal" (click)="mostrarFormulario = !mostrarFormulario">
+  {{ mostrarFormulario ? 'Cancelar' : 'Nueva Historia Clínica' }}
+</button>
+
+<br><br>
+
+<!-- FORMULARIO -->
+<div *ngIf="mostrarFormulario" class="formulario">
+
+  <label>Paciente:</label>
+  <select [(ngModel)]="pacienteSeleccionadoId">
+    <option [ngValue]="null">Seleccione paciente</option>
+    <option *ngFor="let p of pacientes" [value]="p.id">
+      {{ p.nombre }} {{ p.apellido }} ({{ p.dni }})
+    </option>
+  </select>
+
+  <label>Fecha:</label>
+  <input type="date" [(ngModel)]="fechaHistoria">
+
+  <button (click)="guardarHistoria()">Guardar</button>
+
+</div>
+
+<br>
+
+<p *ngIf="cargando">Cargando historias...</p>
+
+<!-- TABLA -->
+<table class="tabla" *ngIf="!cargando">
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Paciente</th>
+      <th>DNI</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr *ngFor="let h of historias">
+
+      <td>{{ h.id }}</td>
+
+      <td>
+        {{ h.paciente?.nombre }} {{ h.paciente?.apellido }}
+      </td>
+
+      <td>{{ h.paciente?.dni }}</td>
+
+      <!-- FECHA -->
+      <td>
+
+        <span *ngIf="editandoId !== h.id">
+          {{ h.fechaCreacion | date:'yyyy-MM-dd' }}
+        </span>
+
+        <input
+          *ngIf="editandoId === h.id"
+          type="date"
+          [(ngModel)]="nuevaFechaEdicion"
+        />
+
+      </td>
+
+      <!-- ACCIONES -->
+      <td>
+
+        <div *ngIf="editandoId !== h.id">
+
+          <button class="btn-editar" (click)="iniciarEdicion(h)">
+            Editar
+          </button>
+
+          <button
+            class="btn-eliminar"
+            (click)="eliminarHistoria(h)"
+            [disabled]="h.visitas?.length > 0">
+            Eliminar
+          </button>
+
+          <button
+            class="btn-secundario"
+            (click)="generarInforme(h)"
+            [disabled]="!h.visitas || h.visitas.length === 0">
+            Informe
+          </button>
+
+        </div>
+
+        <div *ngIf="editandoId === h.id">
+
+          <button class="btn-guardar" (click)="guardarEdicion(h)">
+            Guardar
+          </button>
+
+          <button class="btn-cancelar" (click)="cancelarEdicion()">
+            Cancelar
+          </button>
+
+        </div>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
