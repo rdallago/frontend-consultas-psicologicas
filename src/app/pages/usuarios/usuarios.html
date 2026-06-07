@@ -1,0 +1,123 @@
+<h2>Gestión de Usuarios</h2>
+
+<div class="formulario">
+
+  <h3>{{ nuevoUsuario.id ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+
+  <input
+    [(ngModel)]="nuevoUsuario.username"
+    placeholder="Usuario">
+
+  <input
+    [(ngModel)]="nuevoUsuario.password"
+    type="password"
+    placeholder="Contraseña">
+
+  <select [(ngModel)]="nuevoUsuario.rol">
+
+    <option value="PROFESIONAL">PROFESIONAL</option>
+    <option value="OPERADOR">OPERADOR</option>
+
+    <option *ngIf="esAdmin" value="ADMIN">
+      ADMIN
+    </option>
+
+  </select>
+
+  <button
+  type="button"
+  (click)="guardar()"
+  [disabled]="
+    nuevoUsuario.id &&
+    (!nuevoUsuario.password || nuevoUsuario.password.trim() === '')
+  ">
+  {{ nuevoUsuario.id ? 'Actualizar Usuario' : 'Crear Usuario' }}
+</button>
+
+</div>
+
+<hr>
+
+<h3>Listado de Usuarios</h3>
+
+<p>
+  Total de usuarios:
+  <strong>{{ usuarios.length }}</strong>
+</p>
+
+<table border="1" width="100%">
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Usuario</th>
+      <th>Rol</th>
+      <th>Activo</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr *ngIf="!usuarios || usuarios.length === 0">
+      <td colspan="5" style="text-align:center">
+        No existen usuarios registrados
+      </td>
+    </tr>
+
+    <tr *ngFor="let u of usuarios.filter(u => esAdmin || u.rol !== 'ADMIN')">
+
+      <td>{{ u.id }}</td>
+
+      <td>{{ u.username }}</td>
+
+      <td>{{ u.rol }}</td>
+
+      <td>
+        <span style="color:green;font-weight:bold" *ngIf="u.activo">
+          ACTIVO
+        </span>
+
+        <span style="color:red;font-weight:bold" *ngIf="!u.activo">
+          INACTIVO
+        </span>
+      </td>
+
+      <td>
+
+        <button
+          type="button"
+          (click)="editar(u)"
+          *ngIf="esAdmin || u.rol !== 'ADMIN'">
+          Editar
+        </button>
+
+        <button
+          type="button"
+          (click)="eliminar(u.id, u.rol)"
+          [disabled]="!u.activo"
+          *ngIf="esAdmin || u.rol !== 'ADMIN'">
+          Eliminar
+        </button>
+
+        <button
+          type="button"
+          *ngIf="!u.activo"
+          (click)="reactivar(u.id)">
+          Reactivar
+        </button>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
+<div
+  *ngIf="mostrarToast"
+  class="toast-mensaje">
+
+  {{ mensaje }}
+
+</div>

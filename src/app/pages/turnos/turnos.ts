@@ -84,7 +84,7 @@ export class TurnosComponent implements OnInit {
 
     this.http.get<any[]>(
 
-      'http://localhost:8080/pacientes'
+      'http://localhost:8080/api/pacientes'
 
     ).subscribe({
 

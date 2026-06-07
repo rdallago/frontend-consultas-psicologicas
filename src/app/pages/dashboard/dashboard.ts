@@ -1,4 +1,11 @@
 import {
+  PLATFORM_ID,
+  inject
+} from '@angular/core';
+
+import { isPlatformBrowser } from '@angular/common';
+
+import {
   Component,
   OnInit,
   ViewChild,
@@ -30,7 +37,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   graficoCanvas!: ElementRef<HTMLCanvasElement>;
 
   estadisticas: any[] = [];
-
+ 
   resumen: any = {
     totales: 0,
     asistidos: 0,
@@ -41,6 +48,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   cargando = true;
 
   chart: any;
+  platformId = inject(PLATFORM_ID);
 
   constructor(
     private http: HttpClient,
@@ -94,9 +102,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
 
         // Esperar render del canvas
-        setTimeout(() => {
-          this.crearGrafico();
-        }, 100);
+        if (isPlatformBrowser(this.platformId)) {
+
+  setTimeout(() => {
+    this.crearGrafico();
+  }, 100);
+
+}
 
       },
 
@@ -113,7 +125,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   crearGrafico(): void {
-
+if (!isPlatformBrowser(this.platformId)) {
+  return;
+}
     console.log("CREANDO GRAFICO...");
 
     if (!this.graficoCanvas) {

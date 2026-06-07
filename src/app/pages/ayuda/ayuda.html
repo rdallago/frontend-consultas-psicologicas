@@ -1,0 +1,489 @@
+<h1>Sistema de Gestión Psicológica</h1>
+
+
+<p>
+Bienvenido al Manual de Usuario del Sistema de Gestión Psicológica.
+Este documento describe las principales funcionalidades del sistema y el procedimiento de utilización de cada uno de sus módulos.
+</p>
+
+<hr>
+
+<h2>1. Ingreso al sistema</h2>
+
+<img src="/ayuda/login.png" width="800">
+
+<p>
+El Sistema de Gestión Psicológica requiere autenticación mediante un nombre de usuario y contraseña válidos.
+Los datos de acceso deben haber sido registrados previamente por un usuario con permisos suficientes para administrar cuentas del sistema.
+</p>
+
+<p>
+Existen tres tipos de usuarios:
+</p>
+
+<ul>
+<li><strong>Administrador:</strong> acceso completo a todas las funcionalidades.</li>
+<li><strong>Profesional:</strong> acceso a la gestión clínica y administrativa.</li>
+<li><strong>Operador:</strong> acceso limitado a funciones operativas.</li>
+</ul>
+
+<h3>Pasos para ingresar</h3>
+
+<ol>
+<li>Abrir el sistema.</li>
+<li>Ingresar el nombre de usuario.</li>
+<li>Ingresar la contraseña.</li>
+<li>Presionar el botón <strong>Iniciar Sesión</strong>.</li>
+<li>Si los datos son correctos se mostrará el menú principal.</li>
+</ol>
+
+<p>
+Si las credenciales son incorrectas el sistema impedirá el acceso para proteger la información almacenada.
+</p>
+
+<hr>
+
+<h2>2. Gestión de pacientes</h2>
+
+<img src="/ayuda/pacientes.png" width="800">
+
+<p>
+Este módulo permite administrar la información de los pacientes registrados en el sistema.
+</p>
+
+<h3>Alta de pacientes</h3>
+
+<p>
+Para registrar un nuevo paciente debe completarse la información requerida:
+</p>
+
+<ul>
+<li>Nombre.</li>
+<li>Apellido.</li>
+<li>DNI.</li>
+<li>Correo electrónico.</li>
+<li>Teléfono.</li>
+<li>Dirección.</li>
+<li>Fecha de nacimiento.</li>
+</ul>
+
+<p>
+Una vez guardado el registro, el paciente se incorpora automáticamente al listado general.
+</p>
+
+<h3>Edición de pacientes</h3>
+
+<p>
+Los datos personales pueden modificarse en cualquier momento mediante la opción de edición disponible en la tabla.
+</p>
+
+<h3>Búsqueda de pacientes</h3>
+
+<p>
+La caja de búsqueda ubicada en la parte superior permite localizar pacientes rápidamente.
+A medida que se escribe, la tabla se actualiza automáticamente mostrando únicamente los registros coincidentes.
+</p>
+
+<h3>Eliminación de pacientes</h3>
+
+<p>
+Por razones de integridad de la información, un paciente solo podrá eliminarse cuando:
+</p>
+
+<ul>
+<li>No posea historia clínica asociada.</li>
+<li>No posea turnos asociados.</li>
+</ul>
+
+<p>
+Si existe información vinculada, el sistema impedirá la eliminación y mostrará un mensaje informativo.
+</p>
+
+<hr>
+
+<h2>3. Gestión de turnos</h2>
+
+<img src="/ayuda/turnos.png" width="800">
+
+<p>
+El módulo de turnos permite organizar y administrar la agenda profesional.
+</p>
+
+<h3>Registro de turnos</h3>
+
+<ol>
+<li>Seleccionar una fecha en el calendario.</li>
+<li>Seleccionar la hora disponible.</li>
+<li>Elegir el paciente correspondiente.</li>
+<li>Guardar el turno.</li>
+</ol>
+
+<p>
+Una vez registrado, el turno quedará asociado al paciente seleccionado.
+</p>
+
+<h3>Estados de los turnos</h3>
+
+<ul>
+<li><strong>Agendado:</strong> turno programado pendiente de realización.</li>
+<li><strong>No asistió:</strong> el paciente no concurrió al turno.</li>
+<li><strong>Cancelado:</strong> el paciente informó previamente que no asistiría.</li>
+<li><strong>Asistió:</strong> estado asignado automáticamente cuando existe una visita asociada.</li>
+</ul>
+
+<h3>Identificación visual</h3>
+
+<ul>
+<li>Azul: Agendado.</li>
+<li>Naranja: No asistió.</li>
+<li>Rojo: Cancelado.</li>
+<li>Verde: Asistió.</li>
+</ul>
+
+<h3>Observaciones obligatorias</h3>
+
+<p>
+Los estados <strong>No asistió</strong> y <strong>Cancelado</strong> requieren el registro de una observación que justifique la situación.
+</p>
+
+<h3>Restricciones importantes</h3>
+
+<p>
+Cuando un turno posee una visita asociada, el sistema considera que el paciente asistió.
+En consecuencia:
+</p>
+
+<ul>
+<li>No puede eliminarse el turno.</li>
+<li>No puede modificarse libremente.</li>
+<li>Debe eliminarse primero la visita asociada si se requiere modificar el registro.</li>
+</ul>
+
+<hr>
+
+<h2>4. Gestión de visitas</h2>
+
+<img src="/ayuda/visitas.png" width="800">
+
+<p>
+Las visitas representan las entrevistas o sesiones realizadas por el profesional con el paciente.
+</p>
+
+<h3>Nueva visita</h3>
+
+<p>
+Para registrar una visita es necesario seleccionar previamente un turno válido.
+</p>
+
+<p>
+El sistema recupera automáticamente los datos del paciente vinculados al turno seleccionado.
+</p>
+
+<h3>Observación clínica</h3>
+
+<p>
+Durante la entrevista el profesional puede registrar información clínica relevante escribiendo directamente o utilizando herramientas de dictado por voz disponibles en el sistema.
+</p>
+
+<h3>Resumen automático mediante Inteligencia Artificial</h3>
+
+<p>
+Una vez registrada la visita, el sistema puede generar automáticamente un resumen clínico utilizando inteligencia artificial.
+</p>
+
+<p>
+Este resumen permite sintetizar la información registrada por el profesional y facilitar la posterior elaboración de la historia clínica.
+</p>
+
+<h3>Primera entrevista</h3>
+
+<p>
+Cuando se trata de la primera visita de un paciente, el sistema habilita el registro de información ampliada relacionada con:
+</p>
+
+<ul>
+<li>Motivo de consulta.</li>
+<li>Antecedentes relevantes.</li>
+<li>Información inicial de evaluación.</li>
+<li>Datos necesarios para la confección de la historia clínica.</li>
+</ul>
+
+<hr>
+
+<h2>5. Historia clínica</h2>
+
+<img src="/ayuda/historia_clinica.png" width="800">
+
+<p>
+El módulo de historias clínicas permite gestionar el expediente clínico de cada paciente.
+</p>
+
+<h3>Relación paciente - historia clínica</h3>
+
+<p>
+Cada paciente posee una única historia clínica.
+La relación entre paciente e historia clínica es de uno a uno.
+</p>
+
+<h3>Creación de historias clínicas</h3>
+
+<p>
+Para registrar visitas es necesario que exista previamente una historia clínica asociada al paciente.
+</p>
+
+<p>
+La historia clínica contiene:
+</p>
+
+<ul>
+<li>Paciente.</li>
+<li>Fecha de creación.</li>
+<li>Resumen clínico.</li>
+</ul>
+
+<h3>Generación automática</h3>
+
+<p>
+El sistema puede generar automáticamente un resumen clínico utilizando toda la información registrada en las visitas del paciente.
+</p>
+
+<p>
+El profesional puede revisar, editar y guardar dicho resumen antes de incorporarlo definitivamente a la historia clínica.
+</p>
+
+<h3>Exportación a PDF</h3>
+
+<p>
+Las historias clínicas pueden exportarse a formato PDF para impresión o archivo.
+</p>
+
+<h3>Eliminación</h3>
+
+<p>
+Una historia clínica solo podrá eliminarse cuando no existan visitas asociadas al paciente.
+</p>
+
+<hr>
+
+<h2>6. Dashboard estadístico</h2>
+
+<img src="/ayuda/deshboard.png" width="800">
+
+<p>
+El Dashboard Estadístico proporciona indicadores relacionados con el comportamiento de asistencia de los pacientes.
+</p>
+
+<h3>Indicador principal</h3>
+
+<p>
+El sistema muestra la frecuencia de inasistencias por paciente.
+</p>
+
+<p>
+Esto permite identificar rápidamente aquellos pacientes que registran ausencias reiteradas sin previo aviso.
+</p>
+
+<h3>Información considerada</h3>
+
+<p>
+Únicamente se contabilizan los turnos cuyo estado sea:
+</p>
+
+<ul>
+<li>No asistió.</li>
+</ul>
+
+<p>
+Los turnos cancelados no forman parte de la estadística debido a que el paciente informó previamente su ausencia.
+</p>
+
+<p>
+La información se actualiza en tiempo real a medida que se registran nuevos eventos en la agenda.
+</p>
+
+<hr>
+
+<h2>7. Gestión de usuarios</h2>
+
+<img src="/ayuda/usuarios.png" width="800">
+
+<p>
+Este módulo permite administrar los usuarios que tienen acceso al sistema.
+</p>
+
+<h3>Roles disponibles</h3>
+
+<ul>
+<li>Administrador.</li>
+<li>Profesional.</li>
+<li>Operador.</li>
+</ul>
+
+<h3>Permisos</h3>
+
+<p>
+Los usuarios con rol Profesional y Administrador pueden acceder a este módulo.
+</p>
+
+<p>
+Los usuarios Operador no poseen acceso a la gestión de usuarios.
+</p>
+
+<h3>Administradores</h3>
+
+<p>
+Pueden realizar operaciones de:
+</p>
+
+<ul>
+<li>Alta.</li>
+<li>Modificación.</li>
+<li>Consulta.</li>
+<li>Desactivación y reactivación.</li>
+</ul>
+
+<p>
+Sobre usuarios Administrador, Profesional y Operador.
+</p>
+
+<h3>Profesionales</h3>
+
+<p>
+Pueden administrar usuarios de tipo:
+</p>
+
+<ul>
+<li>Profesional.</li>
+<li>Operador.</li>
+</ul>
+
+<p>
+No pueden administrar usuarios con rol Administrador.
+</p>
+
+<h3>Seguridad de contraseñas</h3>
+
+<p>
+Las contraseñas deben cumplir requisitos mínimos de seguridad establecidos por el sistema.
+</p>
+
+<hr>
+
+<h2>8. Gestión de respaldos</h2>
+
+<img src="/ayuda/respaldos.png" width="800">
+
+<p>
+Este módulo permite realizar copias de seguridad y restauración de la base de datos.
+</p>
+
+<h3>Generación de respaldos</h3>
+
+<p>
+El sistema puede generar archivos SQL que contienen toda la información almacenada.
+</p>
+
+<h3>Restauración</h3>
+
+<p>
+También es posible restaurar la información a partir de un archivo SQL previamente generado.
+</p>
+
+<h3>Acceso</h3>
+
+<p>
+Esta funcionalidad está disponible únicamente para:
+</p>
+
+<ul>
+<li>Administradores.</li>
+<li>Profesionales.</li>
+</ul>
+
+<hr>
+
+<h2>9. Cierre de sesión</h2>
+
+<img src="/ayuda/logout.png" width="800">
+
+<p>
+La opción Cerrar Sesión finaliza la sesión activa del usuario.
+</p>
+
+<p>
+Una vez cerrada la sesión será necesario volver a ingresar las credenciales para acceder nuevamente al sistema.
+</p>
+
+<p>
+Se recomienda cerrar sesión al finalizar el uso de la aplicación, especialmente en equipos compartidos.
+</p>
+
+<hr>
+
+<h2>10. Preguntas frecuentes</h2>
+
+<h3>¿Puedo eliminar un paciente?</h3>
+
+<p>
+Sí, siempre que no tenga historias clínicas ni turnos asociados.
+</p>
+
+<h3>¿Puedo registrar una visita sin turno?</h3>
+
+<p>
+No. Toda visita debe estar asociada a un turno previamente registrado.
+</p>
+
+<h3>¿Puedo registrar una visita sin historia clínica?</h3>
+
+<p>
+No. El sistema solicitará la existencia previa de una historia clínica.
+</p>
+
+<h3>¿Por qué no puedo eliminar un turno?</h3>
+
+<p>
+Probablemente el turno tenga una visita asociada. En ese caso deberá eliminarse primero la visita correspondiente.
+</p>
+
+<h3>¿Por qué un operador no ve los módulos Usuarios y Respaldos?</h3>
+
+<p>
+Porque esos módulos están reservados para usuarios con mayores privilegios de administración.
+</p>
+
+<h3>¿Quién puede administrar usuarios?</h3>
+
+<p>
+Los profesionales y administradores.
+</p>
+
+<h3>¿Quién puede realizar respaldos?</h3>
+
+<p>
+Los profesionales y administradores.
+</p>
+
+<h3>¿Puedo imprimir una historia clínica?</h3>
+
+<p>
+Sí. El sistema permite exportar historias clínicas en formato PDF.
+</p>
+
+<h3>¿Puedo imprimir una visita?</h3>
+
+<p>
+Sí. Cada visita puede exportarse individualmente a formato PDF.
+</p>
+
+<h3>¿Qué sucede si olvido mi contraseña?</h3>
+
+<p>
+Debe solicitar a un administrador o profesional autorizado la actualización de su contraseña.
+</p>
+
+<hr>
+
+<p style="text-align:center;">
+Sistema de Gestión Psicológica - Manual de Usuario
+</p>

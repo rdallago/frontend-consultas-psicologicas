@@ -1,0 +1,55 @@
+.captura-ayuda {
+  width: 100%;
+  max-width: 900px;
+  display: block;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+/*
+.contenedor-ayuda {
+
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+
+}
+
+.indice {
+
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+
+}
+
+.indice ul {
+
+    list-style: none;
+    padding-left: 0;
+
+}
+
+.indice li {
+
+    margin-bottom: 10px;
+
+}
+
+section {
+
+    margin-top: 40px;
+
+}
+
+.captura {
+
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 15px;
+
+}
+*/

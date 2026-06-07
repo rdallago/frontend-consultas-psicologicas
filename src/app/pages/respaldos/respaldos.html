@@ -1,0 +1,68 @@
+<div class="container">
+
+  <h2>💾 Gestión de Respaldos</h2>
+
+  <!-- =========================
+       GENERAR RESPALDO
+  ========================== -->
+  <div class="seccion respaldo">
+
+    <h3>Generar respaldo</h3>
+
+    <p>
+      Crea una copia completa de la base de datos.
+    </p>
+
+    <button
+      class="btn btn-backup"
+      (click)="generarBackup()">
+
+      Generar respaldo
+
+    </button>
+
+  </div>
+
+  <!-- =========================
+       RESTAURAR RESPALDO
+  ========================== -->
+  <div class="seccion restauracion">
+
+    <h3>Restaurar respaldo</h3>
+
+    <p>
+      Seleccione un archivo .sql para restaurar.
+    </p>
+
+    <input
+      type="file"
+      accept=".sql"
+      (change)="seleccionarArchivo($event)"
+    >
+
+    <button
+      class="btn btn-restore"
+      (click)="restaurarBackup()">
+
+      Restaurar respaldo
+
+    </button>
+
+    <div class="advertencia">
+      ⚠ Esta operación reemplazará los datos actuales.
+    </div>
+
+  </div>
+
+  <!-- =========================
+       MENSAJE DE ESTADO
+  ========================== -->
+  <div
+    *ngIf="mensaje"
+    class="mensaje">
+
+    {{ mensaje }}
+
+  </div>
+
+</div>

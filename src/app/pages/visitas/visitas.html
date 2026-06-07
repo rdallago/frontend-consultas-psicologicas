@@ -6,18 +6,10 @@
 
   <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <h2 class="titulo">
+    <h2 class="titulo">Gestión de Visitas</h2>
 
-      Gestión de Visitas
-
-    </h2>
-
-    <button
-      class="btn btn-primary"
-      (click)="abrirPopupNueva()">
-
+    <button class="btn btn-primary" (click)="abrirPopupNueva()">
       Nueva Visita
-
     </button>
 
   </div>
@@ -34,21 +26,19 @@
 
         <div class="col-md-6 mb-2">
 
-          <input
-            class="form-control"
-            placeholder="Buscar paciente..."
-            [(ngModel)]="busquedaPaciente"
-            (input)="buscarPaciente()">
+          <input class="form-control"
+                 placeholder="Buscar paciente..."
+                 [(ngModel)]="busquedaPaciente"
+                 (input)="buscarPaciente()">
 
         </div>
 
         <div class="col-md-6 mb-2">
 
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="busquedaFecha"
-            (change)="buscarFecha()">
+          <input type="date"
+                 class="form-control"
+                 [(ngModel)]="busquedaFecha"
+                 (change)="buscarFecha()">
 
         </div>
 
@@ -69,126 +59,78 @@
       <table class="table table-hover align-middle">
 
         <thead class="table-light">
-
           <tr>
-
             <th>ID</th>
             <th>Fecha</th>
             <th>Paciente</th>
             <th>IA</th>
             <th>Acciones</th>
-
           </tr>
-
         </thead>
 
         <tbody>
 
           <tr *ngFor="let v of visitas">
 
-            <td>
+            <td>{{ v.id }}</td>
 
-              {{ v.id }}
-
-            </td>
+            <td>{{ v.fecha | date:'dd/MM/yyyy' }}</td>
 
             <td>
-
-              {{ v.fecha | date:'dd/MM/yyyy' }}
-
-            </td>
-
-            <td>
-
               <span *ngIf="v.turno?.paciente">
-
                 {{ v.turno?.paciente?.nombre }}
                 {{ v.turno?.paciente?.apellido }}
-
               </span>
 
-              <span
-                *ngIf="!v.turno?.paciente"
-                class="text-danger">
-
+              <span *ngIf="!v.turno?.paciente" class="text-danger">
                 SIN PACIENTE
-
               </span>
-
             </td>
 
-            <!-- ===================================== -->
-            <!-- ESTADO IA -->
-            <!-- ===================================== -->
-
+            <!-- IA -->
             <td>
 
-              <span
-                class="badge bg-warning text-dark"
-                *ngIf="v.estadoIa === 'PROCESANDO'">
-
+              <span class="badge bg-warning text-dark"
+                    *ngIf="v.estadoIa === 'PROCESANDO'">
                 Generando...
-
               </span>
 
-              <span
-                class="badge bg-success"
-                *ngIf="v.estadoIa === 'OK'">
-
+              <span class="badge bg-success"
+                    *ngIf="v.estadoIa === 'OK'">
                 OK
-
               </span>
 
-              <span
-                class="badge bg-danger"
-                *ngIf="v.estadoIa === 'ERROR'">
-
+              <span class="badge bg-danger"
+                    *ngIf="v.estadoIa === 'ERROR'">
                 Error
-
               </span>
 
-              <span
-                class="badge bg-secondary"
-                *ngIf="!v.estadoIa">
-
+              <span class="badge bg-secondary"
+                    *ngIf="!v.estadoIa">
                 Sin IA
-
               </span>
 
             </td>
 
-            <!-- ===================================== -->
             <!-- ACCIONES -->
-            <!-- ===================================== -->
-
             <td>
 
-              <button
-                class="btn btn-warning btn-sm me-2"
-                (click)="abrirEdicion(v)">
-
+              <button class="btn btn-warning btn-sm me-2"
+                      (click)="abrirEdicion(v)">
                 Editar
-
               </button>
 
-              <button
-                class="btn btn-danger btn-sm"
-                (click)="eliminar(v.id)">
-
+              <button class="btn btn-danger btn-sm"
+                      (click)="eliminar(v.id)">
                 Eliminar
-
               </button>
-                
-                <button
-    (click)="verPdf(v.id)"
-    class="btn-pdf"
-    title="Ver PDF"
->
-    <i class="fas fa-file-pdf"></i>
-</button>
-                
-                
-                
+
+              <button (click)="verPdf(v.id)"
+                      class="btn-pdf"
+                      title="Ver PDF">
+                <i class="fas fa-file-pdf"></i>
+              </button>
+
             </td>
 
           </tr>
@@ -197,63 +139,67 @@
 
       </table>
 
-      <!-- ===================================== -->
-      <!-- SIN DATOS -->
-      <!-- ===================================== -->
-
-      <div
-        *ngIf="visitas.length === 0"
-        class="text-center text-muted p-3">
-
+      <div *ngIf="visitas.length === 0"
+           class="text-center text-muted p-3">
         No hay visitas registradas
-
       </div>
 
     </div>
-
   </div>
-
 </div>
+
+<!-- ===================================== -->
+<!-- MODO VISUAL -->
+<!-- ===================================== -->
+
 
 <!-- ===================================== -->
 <!-- POPUP -->
 <!-- ===================================== -->
 
-<div
-  class="popup-overlay"
-  *ngIf="mostrarPopup">
+<div class="popup-overlay" *ngIf="mostrarPopup">
 
   <div class="popup popup-grande">
 
-    <h4 class="mb-4">
-
+    <h4 class="mb-2">
       {{ editando ? 'Editar Visita' : 'Nueva Visita' }}
-
     </h4>
+
+    <!-- INDICADOR -->
+    <div class="mb-3">
+
+      <span class="badge bg-warning text-dark"
+            *ngIf="modoFormulario === 'PRIMERA_ENTREVISTA'">
+        Primera entrevista
+      </span>
+
+      <span class="badge bg-primary"
+            *ngIf="modoFormulario === 'SEGUIMIENTO'">
+        Seguimiento
+      </span>
+
+    </div>
 
     <!-- ===================================== -->
     <!-- TURNO -->
     <!-- ===================================== -->
 
-    <select
-      class="form-select mb-3"
-      [(ngModel)]="nuevaVisita.turno"
-      [disabled]="editando">
+    <select class="form-select mb-3"
+            [(ngModel)]="nuevaVisita.turno"
+            (change)="onTurnoSeleccionado()"
+            [disabled]="editando">
 
       <option [ngValue]="null">
-
         Seleccione turno válido
-
       </option>
 
-      <option
-  *ngFor="let t of turnos"
-  [ngValue]="t"
-  [disabled]="!t || !t.paciente">
+      <option *ngFor="let t of turnos"
+              [ngValue]="t"
+              [disabled]="!t || !t.paciente">
 
-      {{ t?.paciente?.nombre }}
-      {{ t?.paciente?.apellido }}
-      {{ t?.fechaHora | date:'dd/MM/yyyy HH:mm' }}
+        {{ t?.paciente?.nombre }}
+        {{ t?.paciente?.apellido }}
+        {{ t?.fechaHora | date:'dd/MM/yyyy HH:mm' }}
 
       </option>
 
@@ -263,159 +209,93 @@
     <!-- FECHA -->
     <!-- ===================================== -->
 
-    <input
-      type="date"
-      class="form-control mb-4"
-      [ngModel]="nuevaVisita.turno?.fechaHora | date:'yyyy-MM-dd'"
-      disabled>
+    <input type="date"
+           class="form-control mb-4"
+           [ngModel]="nuevaVisita.turno?.fechaHora | date:'yyyy-MM-dd'"
+           disabled>
 
     <!-- ===================================== -->
-    <!-- OBSERVACIONES -->
+    <!-- EDITOR UNIFICADO (CORREGIDO) -->
     <!-- ===================================== -->
 
     <div class="editor-container mb-4">
 
       <label class="form-label fw-bold mb-2">
 
-        Observaciones clínicas
+        {{ modoFormulario === 'PRIMERA_ENTREVISTA'
+            ? 'Registro de Primera Entrevista Clínica'
+            : 'Observaciones clínicas' }}
 
       </label>
-
-      <!-- ===================================== -->
-      <!-- QUILL -->
-      <!-- ===================================== -->
 
       <quill-editor
         [(ngModel)]="nuevaVisita.observacion"
         [modules]="editorModules"
         placeholder="Escriba aquí las observaciones clínicas..."
         style="height: 220px; display:block;">
-
       </quill-editor>
 
-      <!-- ===================================== -->
-      <!-- BOTONES -->
-      <!-- ===================================== -->
+    </div>
 
-      <div
-        class="dictado-container mt-4 d-flex flex-wrap gap-2 align-items-center">
+    <!-- ===================================== -->
+    <!-- SPEECH -->
+    <!-- ===================================== -->
 
-     
+    <div class="dictado-container mt-4 d-flex flex-wrap gap-2 align-items-center">
 
-        <!-- ===================================== -->
-        <!-- MICROFONO -->
-        <!-- ===================================== -->
+      <button type="button"
+              class="btn btn-primary"
+              *ngIf="speechDisponible && !grabando"
+              (click)="iniciarDictado()">
+        🎤 Iniciar dictado
+      </button>
 
-        <button
-          type="button"
-          class="btn btn-primary"
-          *ngIf="speechDisponible && !grabando"
-          (click)="iniciarDictado()">
+      <button type="button"
+              class="btn btn-danger"
+              *ngIf="speechDisponible && grabando"
+              (click)="detenerDictado()">
+        ⏹ Detener dictado
+      </button>
 
-          🎤 Iniciar dictado
+      <span class="text-danger fw-bold" *ngIf="grabando">
+        Escuchando...
+      </span>
 
-        </button>
+    </div>
 
-        <!-- ===================================== -->
-        <!-- DETENER -->
-        <!-- ===================================== -->
+    <!-- ===================================== -->
+    <!-- IA -->
+    <!-- ===================================== -->
 
-        <button
-          type="button"
-          class="btn btn-danger"
-          *ngIf="speechDisponible && grabando"
-          (click)="detenerDictado()">
+    <div *ngIf="nuevaVisita.estadoIa" class="alert alert-secondary mt-4">
 
-          ⏹ Detener dictado
+      <span *ngIf="nuevaVisita.estadoIa === 'PROCESANDO'">
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Generando resumen IA...
+      </span>
 
-        </button>
+      <span *ngIf="nuevaVisita.estadoIa === 'OK'">
+        ✅ Resumen IA generado
+      </span>
 
-        <!-- ===================================== -->
-        <!-- ESTADO -->
-        <!-- ===================================== -->
+      <span *ngIf="nuevaVisita.estadoIa === 'ERROR'">
+        ❌ Error generando resumen IA
+      </span>
 
-        <span
-          class="text-danger fw-bold"
-          *ngIf="grabando">
+    </div>
 
-          Escuchando...
+    <!-- ===================================== -->
+    <!-- RESUMEN IA -->
+    <!-- ===================================== -->
 
-        </span>
+    <div *ngIf="nuevaVisita.resumenIa"
+         class="card shadow-sm border-0 bg-light mt-4">
 
-      </div>
+      <div class="card-body">
 
-      <!-- ===================================== -->
-      <!-- ESTADO IA -->
-      <!-- ===================================== -->
+        <h5>🤖 Resumen generado por IA</h5>
 
-      <div
-        *ngIf="nuevaVisita.estadoIa"
-        class="alert alert-secondary mt-4">
-
-        <span *ngIf="nuevaVisita.estadoIa === 'PROCESANDO'">
-
-          <span
-            class="spinner-border spinner-border-sm me-2">
-          </span>
-
-          Generando resumen IA...
-
-        </span>
-
-        <span *ngIf="nuevaVisita.estadoIa === 'OK'">
-
-          ✅ Resumen IA generado
-
-        </span>
-
-        <span *ngIf="nuevaVisita.estadoIa === 'ERROR'">
-
-          ❌ Error generando resumen IA
-
-        </span>
-
-      </div>
-
-      <!-- ===================================== -->
-      <!-- SPEECH NO SOPORTADO -->
-      <!-- ===================================== -->
-
-      <div
-        *ngIf="!speechDisponible"
-        class="alert alert-warning mt-4">
-
-        El navegador no soporta reconocimiento de voz.
-
-      </div>
-
-      <!-- ===================================== -->
-      <!-- RESUMEN IA -->
-      <!-- ===================================== -->
-
-      <div
-        *ngIf="nuevaVisita.resumenIa"
-        class="card shadow-sm border-0 bg-light mt-4">
-
-        <div class="card-body">
-
-          <div
-            class="d-flex justify-content-between align-items-center mb-3">
-
-            <h5 class="m-0">
-
-              🤖 Resumen generado por IA
-
-            </h5>
-
-          </div>
-
-          <div class="resumen-ia-texto">
-
-            {{ nuevaVisita.resumenIa }}
-
-          </div>
-
-        </div>
+        <div>{{ nuevaVisita.resumenIa }}</div>
 
       </div>
 
@@ -427,29 +307,21 @@
 
     <div class="d-flex justify-content-end gap-2 mt-4">
 
-      <button
-        class="btn btn-secondary"
-        (click)="cerrarPopup()">
-
+      <button class="btn btn-secondary"
+              (click)="cerrarPopup()">
         Cancelar
-
       </button>
 
-      <button
-        class="btn btn-success"
-        (click)="guardar()"
-        [disabled]="guardando">
+      <button class="btn btn-success"
+              (click)="guardar()"
+              [disabled]="guardando">
 
         <span *ngIf="!guardando">
-
           {{ editando ? 'Guardar cambios' : 'Registrar' }}
-
         </span>
 
         <span *ngIf="guardando">
-
           Guardando...
-
         </span>
 
       </button>
@@ -460,13 +332,9 @@
 
 </div>
 
-<!-- ===================================== -->
 <!-- TOAST -->
-<!-- ===================================== -->
-
-<div
-  *ngIf="mostrarToast"
-  class="toast-personalizado">
+<div *ngIf="mostrarToast"
+     class="toast-personalizado">
 
   {{ mensajeToast }}
 

@@ -1,8 +1,13 @@
 <nav class="navbar">
+
+  <!-- LOGO -->
   <div class="logo">
     <a routerLink="/dashboard">🧠 Gestión Psicológica</a>
   </div>
- <div class="menu">
+
+  <!-- MENÚ PRINCIPAL -->
+  <div class="menu">
+
     <a routerLink="/pacientes" routerLinkActive="activo">
       Pacientes
     </a>
@@ -10,13 +15,11 @@
     <a routerLink="/turnos" routerLinkActive="activo">
       Turnos
     </a>
-     
+
     <a routerLink="/dashboard" routerLinkActive="activo">
       Dashboard
     </a>
 
-
-    <!-- Este es el acceso clave que acabamos de crear -->
     <a routerLink="/historias" routerLinkActive="activo">
       Historias Clínicas
     </a>
@@ -25,16 +28,53 @@
       Visitas
     </a>
 
-    <a routerLink="/usuarios" routerLinkActive="activo">
-      Usuarios
-    </a>
+<a
+  *ngIf="puedeVerUsuarios()"
+  routerLink="/usuarios"
+  routerLinkActive="activo">
+  Usuarios
+</a>
 
-    <a routerLink="/respaldos" routerLinkActive="activo">
+    <!-- RESPALDOS (SOLO ADMIN Y PROFESIONAL) -->
+    <a
+      *ngIf="puedeVerRespaldos()"
+      routerLink="/respaldos"
+      routerLinkActive="activo">
       Respaldos
     </a>
+    <a routerLink="/ayuda">
+    Ayuda
+</a>
+
+    <!-- MENSAJE PARA OPERADOR -->
+<span
+  *ngIf="esOperador()"
+  style="color:#888;font-size:12px;margin-left:10px;">
+  (Sin acceso a Usuarios ni Respaldos)
+</span>
   </div>
 
-  <div class="usuario">
-    👤 {{ usuario }}
+  <!-- INFO USUARIO -->
+  <div class="navbar-info">
+
+    <div class="left">
+      <h3>Sistema Consultas Psicológicas</h3>
+    </div>
+
+<div class="right">
+
+  <span *ngIf="estaLogueado()">
+    👤 {{ auth.getUsername() }} ({{ auth.getRol() }})
+  </span>
+
+  <button
+    *ngIf="estaLogueado()"
+    (click)="logout()">
+    Cerrar sesión
+  </button>
+
+</div>
   </div>
+
+
 </nav>

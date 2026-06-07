@@ -1,0 +1,124 @@
+/* ==========================
+   CONTENEDOR PRINCIPAL
+========================== */
+
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ==========================
+   TÍTULO
+========================== */
+
+h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+/* ==========================
+   SECCIONES
+========================== */
+
+.seccion {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.respaldo {
+  background-color: #eefaf1;
+  border-left: 6px solid #28a745;
+}
+
+.restauracion {
+  background-color: #fff5f5;
+  border-left: 6px solid #dc3545;
+}
+
+.seccion h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* ==========================
+   BOTONES
+========================== */
+
+.btn {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Generar respaldo */
+
+.btn-backup {
+  background-color: #28a745;
+}
+
+.btn-backup:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+/* Restaurar respaldo */
+
+.btn-restore {
+  background-color: #dc3545;
+}
+
+.btn-restore:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* ==========================
+   INPUT FILE
+========================== */
+
+input[type="file"] {
+  margin: 15px 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+}
+
+/* ==========================
+   MENSAJES
+========================== */
+
+.mensaje {
+  margin-top: 25px;
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* ==========================
+   ADVERTENCIA
+========================== */
+
+.advertencia {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 10px;
+  font-weight: bold;
+}

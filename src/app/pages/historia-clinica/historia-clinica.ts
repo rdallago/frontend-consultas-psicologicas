@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { QuillModule } from 'ngx-quill';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,8 +10,8 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   templateUrl: './historia-clinica.html',
   styleUrls: ['./historia-clinica.css'],
-  imports: [CommonModule, FormsModule],
-  encapsulation: ViewEncapsulation.None // 🔥 CLAVE PARA QUE SE APLIQUE EL CSS
+  imports: [CommonModule,FormsModule,QuillModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class HistoriaClinicaComponent implements OnInit {
 
@@ -26,10 +26,37 @@ export class HistoriaClinicaComponent implements OnInit {
   mostrarFormulario = false;
   cargando = true;
 
-  // 🔥 EDICIÓN
+  mostrarPopupHistoria = false;
+  historiaSeleccionada: any = null;
+  textoHistoriaClinica = '';
+
   editandoId: number | null = null;
   nuevaFechaEdicion: string = '';
 
+
+    quillConfig = {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],
+
+        [{ 'header': 1 }, { 'header': 2 }],
+
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+
+        [{ 'direction': 'rtl' }],
+
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+
+        [{ 'color': [] }, { 'background': [] }],
+
+        [{ 'align': [] }],
+
+        ['clean']
+      ]
+    };
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -47,82 +74,108 @@ export class HistoriaClinicaComponent implements OnInit {
     this.http.get<any[]>('http://localhost:8080/api/historias')
       .subscribe({
         next: (res) => {
+
           this.historias = res;
           this.historiasOriginal = res;
+
           this.cargando = false;
+
           this.cd.detectChanges();
         },
+
         error: () => {
+
           this.cargando = false;
         }
       });
 
-    this.http.get<any[]>('http://localhost:8080/pacientes')
+    this.http.get<any[]>('http://localhost:8080/api/pacientes')
       .subscribe(res => this.pacientes = res);
   }
+
   filtrar() {
 
-  this.historias = this.historiasOriginal.filter(h => {
+    this.historias = this.historiasOriginal.filter(h => {
 
-    const nombreCompleto =
-      `${h.paciente?.nombre} ${h.paciente?.apellido}`
-      .toLowerCase();
+      const nombreCompleto =
+        `${h.paciente?.nombre} ${h.paciente?.apellido}`
+          .toLowerCase();
 
-    return nombreCompleto.includes(
-      this.filtroNombre.toLowerCase()
-    );
-  });
-}
-
- guardarHistoria() {
-
-  if (!this.pacienteSeleccionadoId) {
-    alert("Debe seleccionar un paciente.");
-    return;
+      return nombreCompleto.includes(
+        this.filtroNombre.toLowerCase()
+      );
+    });
   }
 
-const payload = {
-  paciente: {
-    id: Number(this.pacienteSeleccionadoId)
-  },
-  fechaCreacion: this.fechaHistoria
-};
-console.log("JSON ENVIADO:", payload);
-  this.http.post(
-    'http://localhost:8080/api/historias',
-    payload,
-    {
-      headers: { 'Content-Type': 'application/json' } // 🔥 CLAVE
+  guardarHistoria() {
+
+    if (!this.pacienteSeleccionadoId) {
+
+      alert("Debe seleccionar un paciente.");
+
+      return;
     }
-  ).subscribe({
-    next: () => {
-      alert("Historia creada correctamente");
-      this.mostrarFormulario = false;
-      this.cargarListas();
-    },
-    error: (err) => {
-      console.error("ERROR BACKEND:", err);
-      alert(err.error?.message || "Error al crear la historia");
-    }
-  });
-}
-  // =========================
-  // 🔥 EDICIÓN
-  // =========================
+
+    const payload = {
+
+      paciente: {
+        id: Number(this.pacienteSeleccionadoId)
+      },
+
+      fechaCreacion: this.fechaHistoria
+    };
+
+    console.log("JSON ENVIADO:", payload);
+
+    this.http.post(
+      'http://localhost:8080/api/historias',
+      payload,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe({
+
+      next: () => {
+
+        alert("Historia creada correctamente");
+
+        this.mostrarFormulario = false;
+
+        this.cargarListas();
+      },
+
+      error: (err) => {
+
+        console.error("ERROR BACKEND:", err);
+
+        alert(
+          err.error?.message ||
+          "Error al crear la historia"
+        );
+      }
+    });
+  }
 
   iniciarEdicion(h: any) {
+
     this.editandoId = h.id;
+
     this.nuevaFechaEdicion = h.fechaCreacion;
   }
 
   guardarEdicion(h: any) {
 
     if (!this.nuevaFechaEdicion) {
+
       alert("Seleccione una fecha");
+
       return;
     }
 
     const payload = {
+
       fechaCreacion: this.nuevaFechaEdicion
     };
 
@@ -130,60 +183,230 @@ console.log("JSON ENVIADO:", payload);
       `http://localhost:8080/api/historias/${h.id}`,
       payload
     ).subscribe({
+
       next: () => {
+
         alert("Historia actualizada correctamente");
+
         this.editandoId = null;
+
         this.cargarListas();
       },
+
       error: (err) => {
+
         console.error("ERROR REAL:", err);
-        alert(err.error?.message || "Error al actualizar");
+
+        alert(
+          err.error?.message ||
+          "Error al actualizar"
+        );
       }
     });
   }
 
   cancelarEdicion() {
+
     this.editandoId = null;
   }
 
-eliminarHistoria(h: any) {
+  eliminarHistoria(h: any) {
 
-  console.log("🔥 CLICK ELIMINAR");
-  console.log("Historia:", h);
+    console.log("🔥 CLICK ELIMINAR");
 
-  if (!confirm("¿Eliminar historia?")) {
-    console.log("Cancelado");
+    console.log("Historia:", h);
+
+    if (!confirm("¿Eliminar historia?")) {
+
+      console.log("Cancelado");
+
+      return;
+    }
+
+    console.log("Enviando DELETE...");
+
+    this.http.delete(
+      `http://localhost:8080/api/historias/${h.id}`,
+      { responseType: 'text' }
+    ).subscribe({
+
+      next: (res) => {
+
+        console.log("ELIMINADO OK");
+
+        console.log(res);
+
+        alert("Historia eliminada");
+
+        this.cargarListas();
+      },
+
+      error: (err) => {
+
+        console.error("ERROR DELETE:", err);
+
+        alert("Error al eliminar");
+      }
+    });
+  }
+
+  generarInforme(h: any) {
+
+    alert("Informe próximamente");
+  }
+
+  abrirHistoriaClinica(h: any) {
+
+    this.historiaSeleccionada = h;
+
+    this.mostrarPopupHistoria = true;
+
+    this.textoHistoriaClinica =
+      h.resumenClinico || '';
+  }
+
+  generarHistoriaClinica(h: any) {
+
+    this.abrirHistoriaClinica(h);
+  }
+
+  generarHistoriaClinicaIA() {
+
+    if (!this.historiaSeleccionada?.id) {
+
+      return;
+    }
+
+    this.textoHistoriaClinica =
+      'Generando historia clínica...';
+
+    this.http.post<any>(
+      `http://localhost:8080/api/historias/${this.historiaSeleccionada.id}/generar-resumen`,
+      {}
+    ).subscribe({
+
+      next: (resp) => {
+
+        console.log(
+          "RESPUESTA IA:",
+          resp
+        );
+
+        // ACTUALIZAR TEXTAREA
+        this.textoHistoriaClinica =
+          resp?.resumenClinico || '';
+
+        // ACTUALIZAR OBJETO LOCAL
+        this.historiaSeleccionada.resumenClinico =
+          resp?.resumenClinico || '';
+
+        // ACTUALIZAR TABLA
+        const index =
+          this.historias.findIndex(
+            h => h.id === this.historiaSeleccionada.id
+          );
+
+        if (index !== -1) {
+
+          this.historias[index].resumenClinico =
+            resp?.resumenClinico || '';
+        }
+
+        this.cd.detectChanges();
+      },
+
+      error: (err) => {
+
+        console.error(
+          "ERROR IA:",
+          err
+        );
+
+        this.textoHistoriaClinica =
+          'No se pudo generar historia clínica.';
+      }
+    });
+  }
+
+  guardarHistoriaClinica() {
+
+    if (!this.historiaSeleccionada?.id) {
+
+      return;
+    }
+
+    this.http.put<any>(
+      `http://localhost:8080/api/historias/${this.historiaSeleccionada.id}/guardar-resumen`,
+      {
+        resumenClinico:
+          this.textoHistoriaClinica
+      }
+    ).subscribe({
+
+      next: (resp) => {
+
+        this.historiaSeleccionada.resumenClinico =
+          this.textoHistoriaClinica;
+
+        // ACTUALIZAR TABLA
+        const index =
+          this.historias.findIndex(
+            h => h.id === this.historiaSeleccionada.id
+          );
+
+        if (index !== -1) {
+
+          this.historias[index].resumenClinico =
+            this.textoHistoriaClinica;
+        }
+
+        alert(
+          'Historia clínica guardada'
+        );
+
+        this.cd.detectChanges();
+      },
+
+      error: (err) => {
+
+        console.error(err);
+
+        alert(
+          'Error guardando historia clínica'
+        );
+      }
+    });
+  }
+ pdfHistoria(h: any) {
+
+  if (!h?.id) {
     return;
   }
 
-  console.log("Enviando DELETE...");
+  this.http.get(
+    `http://localhost:8080/api/historias/${h.id}/pdf`,
+    {
+      responseType: 'blob'
+    }
+  )
+  .subscribe({
 
-  this.http.delete(
-    `http://localhost:8080/api/historias/${h.id}`,
-    { responseType: 'text' }
-  ).subscribe({
+    next: (pdf) => {
 
-    next: (res) => {
+      const url =
+        window.URL.createObjectURL(pdf);
 
-      console.log("ELIMINADO OK");
-      console.log(res);
-
-      alert("Historia eliminada");
-
-      this.cargarListas();
+      window.open(url, '_blank');
     },
 
     error: (err) => {
 
-      console.error("ERROR DELETE:", err);
+      console.error(err);
 
-      alert("Error al eliminar");
+      alert(
+        'No se pudo generar el PDF'
+      );
     }
   });
-} 
-
-generarInforme(h: any) {
-  alert("Informe próximamente");
 }
-
 }
