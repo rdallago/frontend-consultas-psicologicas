@@ -656,80 +656,229 @@ onTurnoSeleccionado(): void {
 
      this.nuevaVisita.observacion = `
 
-<h2>REGISTRO DE PRIMERA ENTREVISTA</h2>
+<h2>ENTREVISTA CLÍNICA INICIAL</h2>
 
 <br>
 
-<h3>1. Datos filiatorios</h3>
+<h3>1. Datos de identificación</h3>
 
-<p><strong>Nombre:</strong></p>
-
-<p><strong>Preferencia:</strong></p>
+<p><strong>Nombre completo:</strong></p>
 
 <p><strong>Edad:</strong></p>
 
+<p><strong>Fecha de nacimiento:</strong></p>
+
 <p><strong>DNI:</strong></p>
 
-<p><strong>Ocupación:</strong></p>
+<p><strong>Dirección actual:</strong></p>
 
-<p><strong>Tel:</strong></p>
+<p><strong>Teléfono:</strong></p>
 
-<p><strong>Emergencia:</strong></p>
+<p><strong>Contacto de emergencia:</strong></p>
+
+<p><strong>Parentesco:</strong></p>
+
+<p><strong>Tel. de emergencia:</strong></p>
+
+<p><strong>Estudios previos o cursados:</strong></p>
+
+<p><strong>Ocupación actual:</strong></p>
+
+<p><strong>Estado civil:</strong></p>
+
+<p><strong>Derivado/a por:</strong></p>
 
 <br>
 
-<h3>2. Motivo de consulta</h3>
+<h3>2. Historia de tratamientos previos</h3>
+
+<p><strong>Tratamientos anteriores:</strong> <em>¿Ha realizado procesos de psicoterapia previamente? (orientación, duración, motivo, resultados y razón de finalización)</em></p>
+
+<p>-</p>
+
+<p><strong>Tratamiento farmacológico / psiquiátrico:</strong> <em>¿Actualmente o en el pasado ha recibido atención psiquiátrica?</em></p>
+
+<p>-</p>
+
+<p><strong>Medicación psicotrópica actual:</strong></p>
+
+<p>-</p>
+
+<p><strong>Historial de internaciones o urgencias:</strong> <em>¿Ha tenido episodios previos de crisis graves, ideación suicida, autolesiones o internaciones?</em></p>
+
+<p>-</p>
+
+<p><strong>Balance de tratamientos anteriores:</strong> <em>¿Qué cosas de esos tratamientos siente que le sirvieron y cuáles no?</em></p>
 
 <p>-</p>
 
 <br>
 
-<h3>3. Historia actual</h3>
+<h3>3. Motivo de consulta</h3>
+
+<p><strong>Motivo principal:</strong> <em>¿Cuál es el motivo principal por el cual decidió consultar hoy?</em></p>
+
+<p>-</p>
+
+<p><strong>Hecho reciente:</strong> <em>¿Ocurrió algo en particular recientemente que lo/la llevó a pedir esta cita?</em></p>
+
+<p>-</p>
+
+<p><strong>Expectativas:</strong> <em>¿Qué le gustaría lograr o cambiar a través de este espacio terapéutico?</em></p>
 
 <p>-</p>
 
 <br>
 
-<h3>4. Antecedentes personales</h3>
+<h3>4. Historia del problema actual</h3>
+
+<p><strong>Inicio y evolución:</strong> <em>¿Cuándo comenzó a sentirse así o cuándo notó que este problema empezó a ser un inconveniente?</em></p>
+
+<p>-</p>
+
+<p><strong>Situación desencadenante:</strong> <em>¿Identifica alguna situación o hecho en particular que crea que desencadenó esto?</em></p>
+
+<p>-</p>
+
+<p><strong>Síntomas:</strong> <em>¿Qué síntomas siente?</em></p>
+
+<p>-</p>
+
+<p><strong>Frecuencia e intensidad:</strong> <em>¿Con qué frecuencia e intensidad se presentan los síntomas o la molestia (emocional, conductual, cognitiva)?</em></p>
+
+<p>-</p>
+
+<p><strong>Momentos de empeoramiento:</strong> <em>¿En qué momentos o situaciones nota que estos síntomas empeoran?</em></p>
+
+<p>-</p>
+
+<p><strong>Cuando aparece esta situación, lo que pasa en:</strong></p>
+
+<p><strong>Pensamiento:</strong> <em>¿Qué pensamientos suelen venirle a la cabeza?</em></p>
+
+<p>-</p>
+
+<p><strong>Emoción:</strong> <em>¿Qué emociones siente cuando esto pasa y qué sensaciones nota en su cuerpo?</em></p>
+
+<p>-</p>
+
+<p><strong>Conducta:</strong> <em>¿Qué suele hacer usted cuando se siente de esa manera?</em></p>
+
+<p>-</p>
+
+<p><strong>Impacto funcional:</strong> <em>¿De qué manera esta situación interfiere en sus rutinas cotidianas, trabajo/estudios, relaciones interpersonales o cuidado personal?</em></p>
+
+<p>-</p>
+
+<p><strong>Estrategias de afrontamiento previas:</strong> <em>¿Qué ha intentado hacer hasta ahora para solucionar o gestionar esto? ¿Qué le ha servido y qué no?</em></p>
 
 <p>-</p>
 
 <br>
 
-<h3>5. Antecedentes familiares</h3>
+<h3>5. Antecedentes médicos y farmacológicos</h3>
+
+<p><strong>Antecedentes familiares:</strong> <em>¿Hay en su familia antecedentes médicos o psiquiátricos?</em></p>
+
+<p>-</p>
+
+<p><strong>Enfermedades médicas o crónicas:</strong> <em>¿Padece alguna condición médica, diagnóstico físico o dolor crónico?</em></p>
+
+<p>-</p>
+
+<p><strong>Chequeos:</strong> <em>¿Se realiza chequeos médicos de manera regular?</em></p>
+
+<p>-</p>
+
+<p><strong>Medicación:</strong></p>
 
 <p>-</p>
 
 <br>
 
-<h3>6. Escolaridad / Trabajo</h3>
+<h3>6. Estructura familiar y redes de apoyo</h3>
+
+<p><strong>Composición familiar actual:</strong> <em>¿Con quiénes convive actualmente?</em></p>
+
+<p>-</p>
+
+<p><strong>Familia de origen:</strong> <em>Datos generales sobre padres, hermanos y figuras significativas de crianza.</em></p>
+
+<p>-</p>
+
+<p><strong>Dinámica relacional e historia familiar:</strong> <em>¿Cómo describiría el vínculo con su familia de origen durante su infancia y en la actualidad?</em></p>
+
+<p>-</p>
+
+<p><strong>Relación de pareja:</strong></p>
+
+<p><strong>¿Tiene pareja actualmente?</strong></p>
+
+<p><strong>¿Hace cuánto tiempo?</strong></p>
+
+<p><strong>¿Cómo describiría la relación con él/ella?</strong></p>
+
+<p>-</p>
+
+<p><strong>Hijos - Rol maternal / paternal:</strong></p>
+
+<p><strong>¿Tiene hijos?</strong></p>
+
+<p><strong>¿Cuántos?</strong></p>
+
+<p><strong>¿Cuáles son sus edades, nombres y cómo es el vínculo con cada uno de ellos?</strong></p>
+
+<p>-</p>
+
+<p><strong>Red de apoyo:</strong> <em>¿Con qué personas de su familia o amigos siente que cuenta para buscar apoyo cuando lo necesita?</em></p>
 
 <p>-</p>
 
 <br>
 
-<h3>7. Relaciones vinculares</h3>
+<h3>7. Hábitos y estilo de vida</h3>
+
+<p><strong>Hábitos de sueño:</strong></p>
+
+<p><strong>¿Cuántas horas duerme?</strong></p>
+
+<p><strong>¿Cómo es la calidad de sueño y descanso?</strong></p>
+
+<p>-</p>
+
+<p><strong>Alimentación:</strong> <em>¿Cómo definiría su patrón alimentario actual?</em></p>
+
+<p>-</p>
+
+<p><strong>Consumo de sustancias / Adicciones:</strong> <em>Consumo de alcohol, tabaco, café u otras sustancias (frecuencia, cantidad y contexto de uso).</em></p>
+
+<p>-</p>
+
+<p><strong>Actividad física:</strong> <em>¿Realiza alguna actividad física o deportiva?</em></p>
+
+<p>-</p>
+
+<p><strong>Actividades recreativas:</strong> <em>¿Qué actividades le gusta hacer en su tiempo libre o para despejarse?</em></p>
+
+<p><strong>¿Con qué frecuencia las realiza?</strong></p>
+
+<p>-</p>
+
+<p><strong>Vida social:</strong> <em>¿Tiene amigos, familiares o compañeros de trabajo con quienes socializar? ¿Con qué frecuencia se junta con ellos?</em></p>
 
 <p>-</p>
 
 <br>
 
-<h3>8. Observaciones clínicas</h3>
+<h3>8. Seguridad y riesgo</h3>
+
+<p><strong>Ideación o pensamientos de daño:</strong> <em>¿Ha tenido pensamientos de que preferiría no despertar o de hacerse daño en el último tiempo?</em></p>
 
 <p>-</p>
 
-<br>
-
-<h3>9. Impresión diagnóstica inicial</h3>
+<p><strong>Capacidad de mantenerse a salvo:</strong> <em>¿Siente que la situación actual sobrepasa su capacidad para mantenerse a salvo?</em></p>
 
 <p>-</p>
-
-<br>
-
-<h3>10. Objetivos terapéuticos</h3>
-
-<p>-</p>
-
 `;
 
       } else {
