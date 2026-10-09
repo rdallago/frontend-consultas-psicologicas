@@ -17,9 +17,13 @@
   <div class="encabezado">Dom</div>
 
   <div
-    class="dia"
-    *ngFor="let dia of dias"
-    (click)="abrirFormulario(dia)">
+  *ngFor="let dia of dias"
+  [class.dia]="dia !== null"
+  [class.vacio]="dia === null"
+  (click)="dia !== null && abrirFormulario(dia)">
+
+  <!-- DÍA REAL -->
+  <ng-container *ngIf="dia !== null">
 
     <div class="numero-dia">
       {{ dia }}
@@ -31,15 +35,15 @@
       [ngClass]="turno.estado.toLowerCase()"
       *ngFor="let turno of turnosDelDia(dia)"
       [title]="turno.motivo || ''"
-
-     (click)="editarTurno(turno); $event.stopPropagation()">
+      (click)="editarTurno(turno); $event.stopPropagation()">
 
       {{ turno.fechaHora.substring(11,16) }}
 
     </div>
 
-  </div>
+  </ng-container>
 
+</div>
 </div>
 
 <!-- ===================================== -->
@@ -95,8 +99,9 @@
 
       <label>Estado</label>
 
-      <select [(ngModel)]="nuevoTurno.estado">
-          [disabled]="soloLectura">
+     <select
+  [(ngModel)]="nuevoTurno.estado"
+  [disabled]="soloLectura">
 
         <option value="AGENDADO">
           Agendado

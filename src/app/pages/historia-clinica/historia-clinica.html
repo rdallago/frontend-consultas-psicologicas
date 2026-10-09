@@ -98,8 +98,13 @@
     <h2>Historia Clínica</h2>
 
     <div class="acciones-historia" style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-      <button class="btn-generar" (click)="generarHistoriaClinicaIA()">
-        🧠 Generar historia clínica IA
+      <button
+        class="btn-generar"
+        (click)="generarHistoriaClinicaIA()"
+        [disabled]="generandoHistoriaIA">
+        {{ generandoHistoriaIA
+            ? 'Generando borrador...'
+            : '🧠 Generar historia clínica IA' }}
       </button>
       <button class="btn-guardar" (click)="guardarHistoriaClinica()">
         💾 Guardar cambios

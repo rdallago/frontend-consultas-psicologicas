@@ -1,19 +1,17 @@
 <h2>Pacientes</h2>
 
-<!-- 🔍 BUSCADOR -->
-<input 
-  type="text" 
-  placeholder="Buscar por nombre..." 
+<input
+  type="text"
+  placeholder="Buscar por nombre..."
   [(ngModel)]="filtroNombre"
   (input)="filtrar()"
-/>
+>
 
 <br><br>
 
-<!-- ➕ NUEVO -->
 <button class="btn" (click)="nuevo()">Nuevo Paciente</button>
 
-<p *ngIf="pacientes.length === 0">Cargando pacientes...</p>
+<p *ngIf="pacientes.length === 0">No hay pacientes para mostrar.</p>
 
 <table class="tabla">
   <thead>
@@ -22,16 +20,19 @@
       <th>Nombre</th>
       <th>Apellido</th>
       <th>DNI</th>
+      <th>Edad</th>
+      <th>Fecha de inicio del tratamiento</th>
       <th>Acciones</th>
     </tr>
   </thead>
-
   <tbody>
     <tr *ngFor="let p of pacientes">
       <td>{{ p.id }}</td>
       <td>{{ p.nombre }}</td>
       <td>{{ p.apellido }}</td>
       <td>{{ p.dni }}</td>
+      <td>{{ p.edad != null ? p.edad + ' años' : '—' }}</td>
+      <td>{{ p.fechaInicioTratamiento ? (p.fechaInicioTratamiento | date:'dd/MM/yyyy':'UTC') : '—' }}</td>
       <td>
         <button (click)="editar(p)">Editar</button>
         <button (click)="eliminar(p)">Eliminar</button>

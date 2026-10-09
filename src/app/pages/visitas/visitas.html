@@ -87,8 +87,13 @@
               </span>
             </td>
 
-            <!-- IA -->
+            <!-- Estado de organización de la entrevista / resumen opcional -->
             <td>
+              <span *ngIf="v.tipoVisita === 'PRIMERA_ENTREVISTA' && v.organizadaConIa === true"
+                    class="badge bg-success">Organizada con IA</span>
+              <span *ngIf="v.tipoVisita === 'PRIMERA_ENTREVISTA' && v.organizadaConIa !== true"
+                    class="badge bg-secondary">Sin organización IA registrada</span>
+              <ng-container *ngIf="v.tipoVisita !== 'PRIMERA_ENTREVISTA'">
 
               <span class="badge bg-warning text-dark"
                     *ngIf="v.estadoIa === 'PROCESANDO'">
@@ -105,11 +110,12 @@
                 Error
               </span>
 
-              <span class="badge bg-secondary"
-                    *ngIf="!v.estadoIa">
-                Sin IA
-              </span>
+             <span class="badge bg-secondary"
+                    *ngIf="!v.estadoIa || v.estadoIa === 'NO_SOLICITADO'">
+                Sin resumen IA
+             </span>
 
+              </ng-container>
             </td>
 
             <!-- ACCIONES -->
@@ -241,26 +247,50 @@
     <!-- SPEECH -->
     <!-- ===================================== -->
 
-    <div class="dictado-container mt-4 d-flex flex-wrap gap-2 align-items-center">
-
-      <button type="button"
-              class="btn btn-primary"
-              *ngIf="speechDisponible && !grabando"
-              (click)="iniciarDictado()">
-        🎤 Iniciar dictado
-      </button>
-
-      <button type="button"
-              class="btn btn-danger"
-              *ngIf="speechDisponible && grabando"
-              (click)="detenerDictado()">
-        ⏹ Detener dictado
-      </button>
-
-      <span class="text-danger fw-bold" *ngIf="grabando">
-        Escuchando...
-      </span>
-
+    <!-- Dictado: una acción principal y un estado visible por vez -->
+    <div class="mt-4" *ngIf="modoFormulario === 'PRIMERA_ENTREVISTA'">
+      <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+        <button type="button" class="btn btn-primary"
+                *ngIf="speechDisponible && !grabando && !deteniendoDictado && !organizandoEntrevista"
+                [disabled]="guardando || verificandoGuardado || cargandoVisita || !!transcripcionPrimeraEntrevista.trim()"
+                (click)="iniciarDictado()">
+          🎤 {{ entrevistaOrganizadaLista || editando ? 'Agregar otro dictado' : 'Iniciar dictado' }}
+        </button>
+        <button type="button" class="btn btn-danger" *ngIf="grabando"
+                (click)="detenerDictado()">⏹ Detener dictado</button>
+        <button type="button" class="btn btn-outline-primary"
+                *ngIf="!!errorDictado && !grabando && !deteniendoDictado && !organizandoEntrevista && !!transcripcionPrimeraEntrevista.trim()"
+                (click)="organizarEntrevistaConIA()">Reintentar organización</button>
+      </div>
+      <div class="alert alert-info" role="status" *ngIf="grabando">
+        🎤 Escuchando y transcribiendo... Al terminar, presioná «Detener dictado».
+      </div>
+      <div class="alert alert-info" role="status" *ngIf="deteniendoDictado && !organizandoEntrevista">
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Finalizando la transcripción... Esperá los últimos fragmentos de voz.
+      </div>
+      <div class="alert alert-info" role="status" *ngIf="organizandoEntrevista">
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Organizando entrevista con IA... Puede demorar. No cierres ni guardes todavía.
+      </div>
+      <div class="alert alert-danger" role="alert" *ngIf="errorDictado && !organizandoEntrevista">
+        {{ errorDictado }}
+      </div>
+      <div class="alert alert-success" role="status"
+           *ngIf="entrevistaOrganizadaLista && !grabando && !deteniendoDictado && !organizandoEntrevista && !errorDictado">
+        ✓ Entrevista organizada correctamente. Revisá los campos y después guardá.
+      </div>
+      <div class="alert alert-secondary" *ngIf="!!transcripcionPrimeraEntrevista.trim() && !organizandoEntrevista && !grabando && !deteniendoDictado">
+        <strong>Transcripción pendiente de organizar (todavía no guardada):</strong>
+        <p class="mb-0 mt-2" style="white-space: pre-wrap">{{ transcripcionPrimeraEntrevista }}</p>
+      </div>
+    </div>
+    <!-- Dictado de seguimiento: conservar el comportamiento existente -->
+    <div class="dictado-container mt-4" *ngIf="modoFormulario === 'SEGUIMIENTO'">
+      <button type="button" class="btn btn-primary" *ngIf="speechDisponible && !grabando && !deteniendoDictado"
+              [disabled]="guardando || verificandoGuardado || cargandoVisita" (click)="iniciarDictado()">🎤 Iniciar dictado</button>
+      <button type="button" class="btn btn-danger" *ngIf="grabando" (click)="detenerDictado()">⏹ Detener dictado</button>
+      <span *ngIf="grabando">Escuchando...</span>
     </div>
 
     <!-- ===================================== -->
@@ -284,22 +314,62 @@
 
     </div>
 
-    <!-- ===================================== -->
-    <!-- RESUMEN IA -->
-    <!-- ===================================== -->
+   <!-- ===================================== -->
+<!-- RESUMEN IA OPCIONAL - SEGUIMIENTO -->
+<!-- ===================================== -->
+
+<div *ngIf="editando && modoFormulario === 'SEGUIMIENTO'"
+     class="card shadow-sm border-0 bg-light mt-4">
+
+  <div class="card-body">
+
+    <h5>🤖 Resumen clínico con IA</h5>
+
+    <p class="text-muted small">
+      El resumen se genera solamente cuando lo solicites.
+      No modifica las observaciones clínicas.
+    </p>
+
+    <button
+      type="button"
+      class="btn btn-outline-primary mb-3"
+      (click)="generarResumenVisitaIA(nuevaVisita)"
+      [disabled]="generandoIA || guardando">
+
+      <span *ngIf="!generandoIA">
+        ✨ {{ nuevaVisita.resumenIa
+          ? 'Regenerar resumen IA'
+          : 'Generar resumen IA' }}
+      </span>
+
+      <span *ngIf="generandoIA">
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Generando resumen...
+      </span>
+
+    </button>
 
     <div *ngIf="nuevaVisita.resumenIa"
-         class="card shadow-sm border-0 bg-light mt-4">
+         class="alert alert-success mb-0">
 
-      <div class="card-body">
+      <strong>Resumen generado:</strong>
 
-        <h5>🤖 Resumen generado por IA</h5>
-
-        <div>{{ nuevaVisita.resumenIa }}</div>
-
-      </div>
+      <p class="mb-0 mt-2">
+        {{ nuevaVisita.resumenIa }}
+      </p>
 
     </div>
+
+    <div *ngIf="!nuevaVisita.resumenIa"
+         class="text-muted small">
+
+      Esta visita todavía no tiene un resumen IA.
+
+    </div>
+
+  </div>
+
+</div>
 
     <!-- ===================================== -->
     <!-- BOTONES -->
@@ -314,14 +384,14 @@
 
       <button class="btn btn-success"
               (click)="guardar()"
-              [disabled]="guardando">
+              [disabled]="guardando || grabando || deteniendoDictado || organizandoEntrevista || cargandoVisita || verificandoGuardado || (modoFormulario === 'PRIMERA_ENTREVISTA' && !!transcripcionPrimeraEntrevista.trim())">
 
         <span *ngIf="!guardando">
           {{ editando ? 'Guardar cambios' : 'Registrar' }}
         </span>
 
         <span *ngIf="guardando">
-          Guardando...
+          Guardando y verificando...
         </span>
 
       </button>

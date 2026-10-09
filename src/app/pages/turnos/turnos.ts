@@ -30,7 +30,7 @@ export class TurnosComponent implements OnInit {
 
   pacientes: any[] = [];
 
-  dias: number[] = [];
+  dias: (number | null)[] = [];
 
   mesActual = new Date().getMonth();
 
@@ -136,46 +136,67 @@ export class TurnosComponent implements OnInit {
   // CALENDARIO
   // ==========================
 
-  generarCalendario() {
+generarCalendario() {
 
-    this.dias = [];
+  this.dias = [];
 
-    const cantidadDias = new Date(
+  // Día de la semana en que comienza el mes
+  const primerDia = new Date(
+    this.anioActual,
+    this.mesActual,
+    1
+  ).getDay();
 
-      this.anioActual,
+  // JavaScript:
+  // Domingo = 0
+  // Lunes   = 1
+  // Martes  = 2
+  // Miércoles = 3
+  // Jueves  = 4
+  // Viernes = 5
+  // Sábado  = 6
+  //
+  // Nuestro calendario comienza en Lunes.
+  const posicionInicial = (primerDia + 6) % 7;
 
-      this.mesActual + 1,
+  // Espacios vacíos antes del día 1
+  for (let i = 0; i < posicionInicial; i++) {
 
-      0
-
-    ).getDate();
-
-    for (let i = 1; i <= cantidadDias; i++) {
-
-      this.dias.push(i);
-    }
+    this.dias.push(null);
   }
 
-  cambiarMes(valor: number) {
+  // Cantidad de días del mes
+  const cantidadDias = new Date(
+    this.anioActual,
+    this.mesActual + 1,
+    0
+  ).getDate();
 
-    this.mesActual += valor;
+  // Agregar los días reales
+  for (let dia = 1; dia <= cantidadDias; dia++) {
 
-    if (this.mesActual > 11) {
-
-      this.mesActual = 0;
-
-      this.anioActual++;
-    }
-
-    if (this.mesActual < 0) {
-
-      this.mesActual = 11;
-
-      this.anioActual--;
-    }
-
-    this.generarCalendario();
+    this.dias.push(dia);
   }
+}
+
+cambiarMes(valor: number) {
+
+  this.mesActual += valor;
+
+  if (this.mesActual > 11) {
+
+    this.mesActual = 0;
+    this.anioActual++;
+  }
+
+  if (this.mesActual < 0) {
+
+    this.mesActual = 11;
+    this.anioActual--;
+  }
+
+  this.generarCalendario();
+}
 
   // ==========================
   // FORMULARIO
@@ -604,21 +625,22 @@ editarTurno(turno: any) {
   // TURNOS DEL DÍA
   // ==========================
 
-  turnosDelDia(dia: number) {
+ turnosDelDia(dia: number) {
 
-    return this.turnos.filter(t => {
+  return this.turnos.filter(t => {
 
-      const fecha =
-        new Date(t.fechaHora);
+    const fechaHora = String(t.fechaHora || '');
 
-      return (
+    const fecha = fechaHora.substring(0, 10);
 
-        fecha.getDate() === dia &&
+    const [anio, mes, diaTurno] =
+      fecha.split('-').map(Number);
 
-        fecha.getMonth() === this.mesActual &&
-
-        fecha.getFullYear() === this.anioActual
-      );
-    });
-  }
+    return (
+      diaTurno === dia &&
+      mes === this.mesActual + 1 &&
+      anio === this.anioActual
+    );
+  });
+}
 }

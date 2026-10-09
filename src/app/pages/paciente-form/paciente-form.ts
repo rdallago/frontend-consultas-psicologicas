@@ -11,71 +11,126 @@ import { PacienteService } from '../../services/paciente';
   templateUrl: './paciente-form.html'
 })
 export class PacienteForm implements OnInit {
-
-  paciente: any = null;
-  esEdicion: boolean = false;
+  paciente: any = this.pacienteVacio();
+  esEdicion = false;
+  cargando = false;
+  guardando = false;
+  errorCarga = '';
 
   constructor(
     private service: PacienteService,
     private router: Router,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef
-  ) {
-    // 🔥 Evita reutilización del componente
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  ) {}
+
+  private pacienteVacio(): any {
+    return {
+      nombre: '', apellido: '', dni: '', email: '', telefono: '',
+      direccion: '', fechaNacimiento: null, fechaInicioTratamiento: null,
+      edad: null
+    };
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const idParam = params.get('id');
+      this.esEdicion = idParam !== null;
+      this.errorCarga = '';
+      this.paciente = this.pacienteVacio();
 
-      console.log("ID recibido:", idParam);
+      if (!this.esEdicion) {
+        this.cargando = false;
+        this.cd.detectChanges();
+        return;
+      }
 
-      if (idParam) {
-        const id = Number(idParam);
-        this.esEdicion = true;
+      const id = Number(idParam);
+      if (!Number.isInteger(id) || id <= 0) {
+        this.errorCarga = 'El identificador del paciente no es válido.';
+        this.cargando = false;
+        this.cd.detectChanges();
+        return;
+      }
 
-        this.service.obtenerPorId(id).subscribe({
-          next: (data) => {
-            console.log("Paciente recibido:", data);
-
-            // 🔥 CLAVE
-            this.paciente = { ...data };
-
-            // 🔥 FORZAR ACTUALIZACIÓN DE VISTA
-            this.cd.detectChanges();
-          },
-          error: (err) => {
-            console.error("Error al cargar paciente:", err);
+      this.cargando = true;
+      this.cd.detectChanges();
+      this.service.obtenerPorId(id).subscribe({
+        next: (data: any) => {
+          if (!data || typeof data !== 'object' || !data.id) {
+            this.errorCarga = 'El servidor no devolvió un paciente válido.';
+          } else {
+            this.paciente = {
+              ...this.pacienteVacio(),
+              ...data,
+              fechaNacimiento: data.fechaNacimiento ?? null,
+              fechaInicioTratamiento: data.fechaInicioTratamiento ?? null
+            };
+            this.calcularEdad();
           }
-        });
+          this.cargando = false;
+          this.cd.detectChanges();
+        },
+        error: (err: any) => {
+          console.error('Error al cargar paciente:', err);
+          this.errorCarga = 'No se pudieron cargar los datos del paciente.';
+          this.cargando = false;
+          this.cd.detectChanges();
+        }
+      });
+    });
+  }
 
-      } else {
-        // 👉 Nuevo paciente
-        this.paciente = {};
+  calcularEdad(): void {
+    if (!this.paciente) return;
+    const fecha = this.paciente.fechaNacimiento;
+    this.paciente.edad = null;
+    if (typeof fecha !== 'string') return;
+
+    const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(fecha);
+    if (!partes) return;
+    const anio = Number(partes[1]);
+    const mes = Number(partes[2]);
+    const dia = Number(partes[3]);
+    const nacimiento = new Date(anio, mes - 1, dia);
+    const hoy = new Date();
+    if (nacimiento.getFullYear() !== anio || nacimiento.getMonth() !== mes - 1 ||
+        nacimiento.getDate() !== dia || nacimiento > hoy) return;
+
+    let edad = hoy.getFullYear() - anio;
+    if (hoy.getMonth() + 1 < mes ||
+        (hoy.getMonth() + 1 === mes && hoy.getDate() < dia)) edad--;
+    this.paciente.edad = edad;
+  }
+
+  guardar(): void {
+    if (this.cargando || this.guardando || this.errorCarga || !this.paciente) return;
+    if (!this.paciente.nombre?.trim() || !this.paciente.apellido?.trim()) {
+      alert('Complete los campos obligatorios');
+      return;
+    }
+    // La edad es solo visual: no se envía al backend ni se guarda en MySQL.
+    const { edad, ...datosPaciente } = this.paciente;
+    this.guardando = true;
+    const peticion = this.esEdicion
+      ? this.service.actualizar(this.paciente.id, datosPaciente)
+      : this.service.crear(datosPaciente);
+    peticion.subscribe({
+      next: () => {
+        this.guardando = false;
+        alert(this.esEdicion ? 'Paciente actualizado' : 'Paciente creado');
+        this.router.navigate(['/pacientes']);
+      },
+      error: (err: any) => {
+        this.guardando = false;
+        console.error('Error al guardar paciente:', err);
+        alert(this.esEdicion ? 'Error al actualizar el paciente' : 'Error al crear el paciente');
+        this.cd.detectChanges();
       }
     });
   }
 
-guardar() {
-  if (!this.paciente.nombre || !this.paciente.dni) {
-    alert('Complete los campos obligatorios');
-    return;
-  }
-
-  if (this.esEdicion) {
-    this.service.actualizar(this.paciente.id, this.paciente).subscribe(() => {
-      alert('Paciente actualizado');
-      this.router.navigate(['/pacientes']);
-    });
-  } else {
-    this.service.crear(this.paciente).subscribe(() => {
-      alert('Paciente creado');
-      this.router.navigate(['/pacientes']);
-    });
-  }
-}
-  volver() {
+  volver(): void {
     this.router.navigate(['/pacientes']);
   }
 }

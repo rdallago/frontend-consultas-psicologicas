@@ -270,63 +270,58 @@ export class HistoriaClinicaComponent implements OnInit {
     this.abrirHistoriaClinica(h);
   }
 
-  generarHistoriaClinicaIA() {
+generandoHistoriaIA = false;
 
-    if (!this.historiaSeleccionada?.id) {
+generarHistoriaClinicaIA() {
 
-      return;
-    }
-
-    this.textoHistoriaClinica =
-      'Generando historia clínica...';
-
-    this.http.post<any>(
-      `http://localhost:8080/api/historias/${this.historiaSeleccionada.id}/generar-resumen`,
-      {}
-    ).subscribe({
-
-      next: (resp) => {
-
-        console.log(
-          "RESPUESTA IA:",
-          resp
-        );
-
-        // ACTUALIZAR TEXTAREA
-        this.textoHistoriaClinica =
-          resp?.resumenClinico || '';
-
-        // ACTUALIZAR OBJETO LOCAL
-        this.historiaSeleccionada.resumenClinico =
-          resp?.resumenClinico || '';
-
-        // ACTUALIZAR TABLA
-        const index =
-          this.historias.findIndex(
-            h => h.id === this.historiaSeleccionada.id
-          );
-
-        if (index !== -1) {
-
-          this.historias[index].resumenClinico =
-            resp?.resumenClinico || '';
-        }
-
-        this.cd.detectChanges();
-      },
-
-      error: (err) => {
-
-        console.error(
-          "ERROR IA:",
-          err
-        );
-
-        this.textoHistoriaClinica =
-          'No se pudo generar historia clínica.';
-      }
-    });
+  if (!this.historiaSeleccionada?.id || this.generandoHistoriaIA) {
+    return;
   }
+
+  const confirmar = confirm(
+    'Se generará un nuevo borrador con IA utilizando las entrevistas del paciente. ' +
+    'El texto actual del editor será reemplazado, pero la historia clínica guardada ' +
+    'no cambiará hasta que presione Guardar cambios. ¿Continuar?'
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  this.generandoHistoriaIA = true;
+
+  this.http.post<{ borrador: string }>(
+    `http://localhost:8080/api/historias/${this.historiaSeleccionada.id}/generar-borrador`,
+    {}
+  ).subscribe({
+
+    next: (resp) => {
+
+      this.textoHistoriaClinica = resp.borrador;
+
+      this.generandoHistoriaIA = false;
+
+      this.cd.detectChanges();
+
+      alert(
+        'Borrador generado. Revíselo y presione Guardar cambios ' +
+        'cuando esté conforme.'
+      );
+    },
+
+    error: (err) => {
+
+      console.error('Error generando borrador:', err);
+
+      this.generandoHistoriaIA = false;
+
+      alert(
+        err.error?.mensaje ||
+        'No se pudo generar el borrador. Se conservó el texto anterior.'
+      );
+    }
+  });
+}
 
   guardarHistoriaClinica() {
 
