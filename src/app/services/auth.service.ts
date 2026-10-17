@@ -54,9 +54,35 @@ export class AuthService {
 
   isLogged(): boolean {
 
-    return !!this.getToken();
+  const token = this.getToken();
+
+  if (!token) {
+    return false;
   }
 
+  try {
+
+    const payload: any = jwtDecode(token);
+
+    if (!payload.exp) {
+      return false;
+    }
+
+    const ahora = Math.floor(Date.now() / 1000);
+
+    if (payload.exp <= ahora) {
+      this.logout();
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+
+    this.logout();
+    return false;
+  }
+}
   getRol(): string {
 
     const token = this.getToken();
